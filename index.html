@@ -27588,7 +27588,7 @@ Host: </code></pre>
 
 <tr>
 <td>GET</td>
-<td><code>{{baseUrl}}/v1/data-protection/store-type-name/object/link?region={region_name}&amp;bucket={bucket_name}&amp;object-key={object_name}</code></td>
+<td><code>{{baseUrl}}/v1/data-protection/{store-type-name}/object/link?region={region_name}&amp;bucket={bucket_name}&amp;object-key={object_name}</code></td>
 <td>Generate an encoded URI or a pre-signed URL to download an object in clear format.</td>
 </tr>
 </tbody>
@@ -27620,6 +27620,27 @@ Host: </code></pre>
 </ol>
 
 <p>This API is a synchronous call.</p>
+
+<h5>Quick Reference for S3 Object Store</h5>
+
+<table>
+<thead>
+<tr>
+<th><strong>HTTP Verb</strong></th>
+<th><strong>Path</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>PUT</td>
+<td><code>{{baseUrl}}/v1/data-protection/{store-type-name}/object</code></td>
+<td>Encrypt an object in-place in the object store.</td>
+</tr>
+</table>
+</div>
+
 
 <h5>S3-Related Path Parameter</h5>
 
@@ -27850,6 +27871,29 @@ Accept: application/json
 <h5>How to know if an object is encrypted by Titaniam Data-Protection Service?</h5>
 
 <p>Objects encrypted by Titaniam data-protection service has the mandatory tag <code>key-signature</code> and optionally an <code>X-tn-Customer</code> tag.</p>
+
+<h5>Quick Reference for S3 Object Store</h5>
+
+<table>
+<thead>
+<tr>
+<th><strong>HTTP Verb</strong></th>
+<th><strong>Path</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+<td>GET</td>
+<td><code>{{baseUrl}}/v1/data-protection/{store-type-name}/object/link?region={region_name}&amp;bucket={bucket_name}&amp;object-key={object_name}</code></td>
+<td>Generate an encoded URI or a pre-signed URL to download an object in clear format.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
 
 <h5>S3-Related Path Parameter</h5>
 
