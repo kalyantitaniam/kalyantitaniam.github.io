@@ -762,7 +762,7 @@ pre code {
 		<a href="#folder-elasticsearch-proxy-endpoints">Elasticsearch Proxy</a>
 		</li>
 		    <li>
-			<a href="#doc-proxy">Object Store Proxy</a>
+			<a href="#doc-proxy">Object Store Protection</a>
 			<ul>	
         
         <li>
@@ -804,16 +804,16 @@ pre code {
                 
             </ul>
         </li> 
-        <li>
+         <li>
             <a href="#folder-data-protection-for-object-stores">Data Protection for Object Stores</a>
             <ul>
                 
                 <li>
-                    <a href="#request-data-protection-for-object-stores-encrypt-an-object-in-place">Encrypt an Object in-place</a>
+                    <a href="#request-data-protection-for-object-stores-encrypt-an-object-in-place">Encrypt an Object in-place in S3</a>
                 </li>
                 
                 <li>
-                    <a href="#request-data-protection-for-object-stores-retrieve-an-object-from-the-object-store">Retrieve an Object from the Object Store</a>
+                    <a href="#request-data-protection-for-object-stores-generate-an-uri-to-download-an-object">Generate an URI to Download an Object in S3</a>
                 </li>
                 
             </ul>
@@ -26338,10 +26338,13 @@ Host: 13.234.194.57:8080</code></pre>
 
                 </div>
                 <h2 id="doc-proxy">
-                    Object Store Proxy
+                    Object Store Protection
                     <a href="#doc-api-detail"><i class="glyphicon glyphicon-link"></i></a>
                 </h2>
-				<div><p>Titaniam Proxy for Object store (referred to as Proxy in this document) allows you to protect an object store such as Azure Blob and AWS S3.</p></div>
+				<div><p>Titaniam offers two solutions to protect your object store:</p>
+				<ul>
+				<li>Titaniam Proxy for Object store (referred to as Proxy in this document) allows you to protect an object store such as Azure Blob and AWS S3.</li>
+				<li>Data Protection service that lets you encrypt objects in place in the object store.</li></ul></div>
                 
 				<div class="endpoints-group">
                     <h3 id="folder-titaniam-proxy-for-azure-object-store">
@@ -27549,6 +27552,7 @@ Host: </code></pre>
                         <hr>
                     </div>
                       <div class="endpoints-group">
+                    <div class="endpoints-group">
                     <h3 id="folder-data-protection-for-object-stores">
                         Data Protection for Object Stores
                         <a href="#folder-data-protection-for-object-stores"><i class="glyphicon glyphicon-link"></i></a>
@@ -27562,7 +27566,9 @@ Host: </code></pre>
 <br /></li>
 </ul>
 
-<h4>Quick Reference</h4>
+<p><strong>Note</strong>: This API is available only if you have set <code>sdss.data.protection.enabled=true</code> during the data-protection service deployment.</p>
+
+<h4>Quick Reference for S3 Object Store</h4>
 
 <table>
 <thead>
@@ -27576,14 +27582,14 @@ Host: </code></pre>
 <tbody>
 <tr>
 <td>PUT</td>
-<td><code>{{baseUrl}}/v1/data-protection/s3/object</code></td>
+<td><code>{{baseUrl}}/v1/data-protection/{store-type-name}/object</code></td>
 <td>Encrypt an object in-place in the object store.</td>
 </tr>
 
 <tr>
 <td>GET</td>
-<td><code>{{baseUrl}}/v1/data-protection/s3/object/link?region={region_name}&amp;bucket={bucket_name}&amp;object-key={object_name}</code></td>
-<td>Generate a pre-signed URL or an encoded URI to download an object in clear format.</td>
+<td><code>{{baseUrl}}/v1/data-protection/store-type-name/object/link?region={region_name}&amp;bucket={bucket_name}&amp;object-key={object_name}</code></td>
+<td>Generate an encoded URI or a pre-signed URL to download an object in clear format.</td>
 </tr>
 </tbody>
 </table>
@@ -27594,24 +27600,28 @@ Host: </code></pre>
                     <div class="request">
 
                         <h4 id="request-data-protection-for-object-stores-encrypt-an-object-in-place">
-                            Encrypt an Object in-place
+                            Encrypt an Object in-place in S3
                             <a href="#request-data-protection-for-object-stores-encrypt-an-object-in-place"><i class="glyphicon glyphicon-link"></i></a>
                         </h4>
 
-                        <div><p><strong>Note</strong>: This API is available only if you have set <code>data.protection.enabled=true</code> during the data-protection service deployment.</p>
+                        <div><p><strong>Note</strong>: This API is available only if you have set <code>sdss.data.protection.enabled=true</code> during the data-protection service deployment.</p>
 
-<p>This API lets you encrypt an existing object in-place. Currently, you can use this API to encrypt objects in an AWS S3 object store. The assumption is that the source application passes on the object reference (detail such as the location and name). The data-protection service uses the data encryption you provide (using AWS Secrets Manager or local file system) to perform this encryption. This API does the following calls:</p>
+<p>This API lets you encrypt an existing object in-place. Currently, you can use this API to encrypt objects in an AWS S3 object store. The assumption is that the source application passes on the object reference (detail such as the location and name). The data-protection service uses the data encryption key you provide to perform this encryption.</p>
+
+<h5>Protecting S3</h5>
+
+<p>If you are using the data-protection service to protect S3 objects, this API does the following calls:</p>
 
 <ol>
-<li>Read the object from the object store. If the object has the following tags: <code>key-signature</code> and <code>X-tn-customer</code>, the Titaniam data-protection service does not encrypt the object.</li>
+<li>Read the object from the object store. If the object has the tag: <code>key-signature</code>, the Titaniam data-protection service does not encrypt the object.</li>
 <li>Perform the encryption.</li>
-<li>Write the object to the object store and applies the <code>key-signature</code> and <code>X-tn-customer</code> tags to indicate that the object is encrypted by the Titaniam data-protection service.
+<li>Write the object to the object store and applies the <code>key-signature</code> and <code>X-tn-customer</code> (if specified in the request header) tags to indicate that the object is encrypted by the Titaniam data-protection service.
 <br /></li>
 </ol>
 
 <p>This API is a synchronous call.</p>
 
-<h3>Path Parameter</h3>
+<h5>S3-Related Path Parameter</h5>
 
 <table>
 <thead>
@@ -27633,7 +27643,7 @@ Host: </code></pre>
 </tbody>
 </table>
 
-<h3>Body Parameters</h3>
+<h5>S3-Related Body Parameters</h5>
 
 <table>
 <thead>
@@ -27650,14 +27660,14 @@ Host: </code></pre>
 <td><code>bucket</code></td>
 <td>Yes</td>
 <td>Any existing bucket name in the object store</td>
-<td>Specify the bucket name in the object store. <strong>Note</strong> that bucket versioning is not supported.  <br>Also, ensure that the bucket exists in s3 region. Otherwise, an error is reported.</td>
+<td>Specify the bucket name in the object store. <strong>Note:</strong> You cannot use a bucket that has versioning enabled.  <br>Also, ensure that the bucket exists in s3 region. Otherwise, an error is reported.</td>
 </tr>
 
 <tr>
 <td><code>object-key</code></td>
 <td>Yes</td>
 <td>Name of the object to encrypt</td>
-<td>Specify the object that you want to encrypt. Ensure that the object does not have the <code>key-signature</code> and <code>X-tn-customer</code> tags. If these tags are found, Titaniam data-protection service does not encrypt the object.</td>
+<td>Specify the object that you want to encrypt. Ensure that the object does not have the <code>key-signature</code> tag. If this tags is found, Titaniam data-protection service does not encrypt the object.</td>
 </tr>
 
 <tr>
@@ -27669,11 +27679,11 @@ Host: </code></pre>
 </tbody>
 </table>
 
-<h3>Headers</h3>
+<h5>Headers</h5>
 
-<p>Specify the following header: <code>X-tn-customer</code> only if you are using Titaniam S3 proxy in the bring your own key (BYOK) mode.</p>
+<p>Specify the following header: <code>X-tn-customer</code> with the keyring name to use. The Titaniam service will use this key to encrypt the data.</p>
 
-<h3>Response</h3>
+<h5>S3-Related Response</h5>
 
 <p>This endpoint returns the following fields in the response:</p>
 
@@ -27683,14 +27693,23 @@ Host: </code></pre>
 <li><code>code</code>: Specifies the response return code.
 
 <ul>
-<li><code>SUCCESS</code> indicates that the request was successful</li>
-<li><code>OBJECT_DOES_NOT_EXIST</code> indicates that the requested object does not exist.</li>
+<li><code>SUCCESS</code> indicates that the request was successful.</li>
 </ul></li>
 <li><code>message</code>: Provides more information about the request. The message provides verbose information corresponding to the <code>code</code>.
 <br /></li>
 </ul>
 
-<p>If the API request is invalid of the operation is interrupted, it returns a <strong>500 Internal Server Error</strong> response.</p>
+<p>If the API request is invalid or if the operation is interrupted, it returns a <strong>500 Internal Server Error</strong> response. In this case, following are some of the error codes:</p>
+
+<ul>
+<li><code>OBJECT_IDENTIFIER_INFO_NOT_AVAILABLE</code> indicates that the requested object does not exist.</li>
+<li><code>S3_INVALID_BUCKET_KEY:</code> indicates that the bucket name is invalid.</li>
+<li><code>INVALID_STORE_TYPE_NAME</code> indicates that the store type name you have specified is incorrect.</li>
+<li><code>EMPTY_BUCKET_PARAM:</code> indicates that you have not specified the bucket name in the input parameters.</li>
+<li><code>EMPTY_OBJECT_ID_PARAM:</code> indicates the object that you have not specified the object name.</li>
+<li><code>S3_BUCKET_VERSIONED_ERROR: indicates that the bucket you have specified is versioned</code></li>
+<li><code>UNABLE_TO_GET_S3_OBJECT: indicates that there was a technical error in retrieving the object.</code></li>
+</ul>
 </div>
 
                         <div>
@@ -27731,7 +27750,7 @@ Accept: application/json
                             <ul class="nav nav-tabs" role="tablist">
                                 
                                 <li role="presentation" class="active">
-                                    <a href="#request-data-protection-for-object-stores-encrypt-an-object-in-place-responses-4f021fc3-31a3-4d48-b247-0cf8b96a1384" data-toggle="tab">
+                                    <a href="#request-data-protection-for-object-stores-encrypt-an-object-in-place-responses-4dda2379-7c55-4c58-8c17-f14ff9bc1b29" data-toggle="tab">
                                         
                                             Successful operation
                                         
@@ -27739,7 +27758,7 @@ Accept: application/json
                                 </li>
                                 
                                 <li role="presentation">
-                                    <a href="#request-data-protection-for-object-stores-encrypt-an-object-in-place-responses-7ac12567-9386-4331-8f92-09d984dc3b98" data-toggle="tab">
+                                    <a href="#request-data-protection-for-object-stores-encrypt-an-object-in-place-responses-d09e3874-37cd-4cf0-843e-fc6808833ff8" data-toggle="tab">
                                         
                                             Error: PUT operation
                                         
@@ -27747,7 +27766,7 @@ Accept: application/json
                                 </li>
                                 
                                 <li role="presentation">
-                                    <a href="#request-data-protection-for-object-stores-encrypt-an-object-in-place-responses-9f021f21-8b59-40ed-af06-d8c11476ecfe" data-toggle="tab">
+                                    <a href="#request-data-protection-for-object-stores-encrypt-an-object-in-place-responses-2481e44d-1379-4b32-ba55-bc000f6ecf4d" data-toggle="tab">
                                         
                                             Invalid request or technical issue interrupted the processing
                                         
@@ -27757,7 +27776,7 @@ Accept: application/json
                             </ul>
                             <div class="tab-content">
                                 
-                                <div class="tab-pane active" id="request-data-protection-for-object-stores-encrypt-an-object-in-place-responses-4f021fc3-31a3-4d48-b247-0cf8b96a1384">
+                                <div class="tab-pane active" id="request-data-protection-for-object-stores-encrypt-an-object-in-place-responses-4dda2379-7c55-4c58-8c17-f14ff9bc1b29">
                                     <table class="table table-bordered">
                                         <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
                                         
@@ -27776,7 +27795,7 @@ Accept: application/json
                                     </table>
                                 </div>
                                 
-                                <div class="tab-pane" id="request-data-protection-for-object-stores-encrypt-an-object-in-place-responses-7ac12567-9386-4331-8f92-09d984dc3b98">
+                                <div class="tab-pane" id="request-data-protection-for-object-stores-encrypt-an-object-in-place-responses-d09e3874-37cd-4cf0-843e-fc6808833ff8">
                                     <table class="table table-bordered">
                                         <tr><th style="width: 20%;">Status</th><td>400 Bad Request</td></tr>
                                         
@@ -27795,7 +27814,7 @@ Accept: application/json
                                     </table>
                                 </div>
                                 
-                                <div class="tab-pane" id="request-data-protection-for-object-stores-encrypt-an-object-in-place-responses-9f021f21-8b59-40ed-af06-d8c11476ecfe">
+                                <div class="tab-pane" id="request-data-protection-for-object-stores-encrypt-an-object-in-place-responses-2481e44d-1379-4b32-ba55-bc000f6ecf4d">
                                     <table class="table table-bordered">
                                         <tr><th style="width: 20%;">Status</th><td>500 Internal Server Error</td></tr>
                                         
@@ -27815,24 +27834,24 @@ Accept: application/json
                     
                     <div class="request">
 
-                        <h4 id="request-data-protection-for-object-stores-retrieve-an-object-from-the-object-store">
-                            Retrieve an Object from the Object Store
-                            <a href="#request-data-protection-for-object-stores-retrieve-an-object-from-the-object-store"><i class="glyphicon glyphicon-link"></i></a>
+                        <h4 id="request-data-protection-for-object-stores-generate-an-uri-to-download-an-object">
+                            Generate an URI to Download an Object from S3
+                            <a href="#request-data-protection-for-object-stores-generate-an-uri-to-download-an-object"><i class="glyphicon glyphicon-link"></i></a>
                         </h4>
 
-                        <div><p><strong>Note</strong>: This API is available only if you have set <code>data.protection.enabled=true</code> during the Titaniam S3 proxy deployment.</p>
+                        <div><p><strong>Note</strong>: This API is available only if you have set <code>sdss.data.protection.enabled=true</code> during the Titaniam data protection service deployment.</p>
 
-<p>This API lets you retrieve an object from the object store in clear format.</p>
+<p>This API generates an encoded URI or a pre-signed URL to the specified object.</p>
 
-<p>If you are retrieving an object encrypted by Titaniam data-protection service, the response is a encoded URI to the object. You must construct the correct URL to get the object in this case.</p>
+<p>If you are generating the download link to an object encrypted by Titaniam data-protection service, the response is an encoded URI to the object. This URI does not include the host information. You must construct the correct URL to get the object in this case.</p>
 
-<p>If you are retrieving an object not encrypted by Titaniam data-protection service, the response is a fully constructed pre-signed URL.</p>
+<p>If you generating the download link for object that is not encrypted by Titaniam data-protection service, the response is a fully constructed pre-signed URL.</p>
 
-<h3>How to know if an object is encrypted by Titaniam Data-Protection Service?</h3>
+<h5>How to know if an object is encrypted by Titaniam Data-Protection Service?</h5>
 
 <p>Objects encrypted by Titaniam data-protection service has the mandatory tag <code>key-signature</code> and optionally an <code>X-tn-Customer</code> tag.</p>
 
-<h3>Path Parameter</h3>
+<h5>S3-Related Path Parameter</h5>
 
 <table>
 <thead>
@@ -27854,7 +27873,7 @@ Accept: application/json
 </tbody>
 </table>
 
-<h3>Query Parameters</h3>
+<h5>S3-Related Query Parameters</h5>
 
 <table>
 <thead>
@@ -27871,14 +27890,14 @@ Accept: application/json
 <td><code>bucket</code></td>
 <td>Yes</td>
 <td>Any existing bucket name in the object store</td>
-<td>Specify the bucket name in the object store. <strong>Note</strong> that bucket versioning is not supported.  <br>Also, ensure that the bucket exists in s3 region. Otherwise, an error is reported.</td>
+<td>Specify the bucket name in the object store. <strong>Note:</strong> You cannot use a bucket that has versioning enabled.  <br>Also, ensure that the bucket exists in s3 region. Otherwise, an error is reported.</td>
 </tr>
 
 <tr>
 <td><code>object-key</code></td>
 <td>Yes</td>
 <td>Name of the object to decrypt</td>
-<td>Specify the object that you want to decrypt.</td>
+<td>Specify the object for which you want to generate the download URI.</td>
 </tr>
 
 <tr>
@@ -27890,11 +27909,7 @@ Accept: application/json
 </tbody>
 </table>
 
-<h3>Headers</h3>
-
-<p>Specify the following header: <code>X-tn-customer</code> only if you are using Titaniam data-protection service in the bring your own key (BYOK) mode.</p>
-
-<h3>Response</h3>
+<h5>S3-Related Response</h5>
 
 <p>This endpoint returns the following fields in the response:</p>
 
@@ -27913,19 +27928,29 @@ Accept: application/json
 <br /></li>
 </ul>
 
-<p>If the API request is invalid of the operation is interrupted, it returns a <strong>500 Internal Server Error</strong> response.</p>
+<p>If the API request is invalid or if the operation is interrupted, it returns a <strong>500 Internal Server Error</strong> response. In this case, following are some of the error codes:</p>
+
+<ul>
+<li><code>OBJECT_IDENTIFIER_INFO_NOT_AVAILABLE</code> indicates that the requested object does not exist.</li>
+<li><code>S3_INVALID_BUCKET_KEY:</code> indicates that the bucket name is invalid.</li>
+<li><code>INVALID_STORE_TYPE_NAME</code> indicates that the store type name you have specified is incorrect.</li>
+<li><code>EMPTY_BUCKET_PARAM:</code> indicates that you have not specified the bucket name in the input parameters.</li>
+<li><code>EMPTY_OBJECT_ID_PARAM:</code> indicates the object that you have not specified the object name.</li>
+<li><code>S3_BUCKET_VERSIONED_ERROR: indicates that the bucket you have specified is versioned</code></li>
+<li><code>UNABLE_TO_GET_S3_OBJECT: indicates that there was a technical error in retrieving the object.</code></li>
+</ul>
 </div>
 
                         <div>
                             <ul class="nav nav-tabs" role="tablist">
-                                <li role="presentation" class="active"><a href="#request-data-protection-for-object-stores-retrieve-an-object-from-the-object-store-example-curl" data-toggle="tab">Curl</a></li>
-                                <li role="presentation"><a href="#request-data-protection-for-object-stores-retrieve-an-object-from-the-object-store-example-http" data-toggle="tab">HTTP</a></li>
+                                <li role="presentation" class="active"><a href="#request-data-protection-for-object-stores-generate-an-uri-to-download-an-object-example-curl" data-toggle="tab">Curl</a></li>
+                                <li role="presentation"><a href="#request-data-protection-for-object-stores-generate-an-uri-to-download-an-object-example-http" data-toggle="tab">HTTP</a></li>
                             </ul>
                             <div class="tab-content">
-                                <div class="tab-pane active" id="request-data-protection-for-object-stores-retrieve-an-object-from-the-object-store-example-curl">
+                                <div class="tab-pane active" id="request-data-protection-for-object-stores-generate-an-uri-to-download-an-object-example-curl">
                                     <pre><code class="hljs curl">curl -X GET -H "Accept: application/json" "{{baseUrl}}/v1/data-protection/s3/object/link?region=us-west-1&bucket=binary_upload1&object-key=/customer/testdata.txt"</code></pre>
                                 </div>
-                                <div class="tab-pane" id="request-data-protection-for-object-stores-retrieve-an-object-from-the-object-store-example-http">
+                                <div class="tab-pane" id="request-data-protection-for-object-stores-generate-an-uri-to-download-an-object-example-http">
                                     <pre><code class="hljs http">GET %7B%7BbaseUrl%7D%7D/v1/data-protection/s3/object/link?region=us-west-1&bucket=binary_upload1&object-key=/customer/testdata.txt HTTP/1.1
 Host: 
 Accept: application/json</code></pre>
@@ -27938,7 +27963,7 @@ Accept: application/json</code></pre>
                             <ul class="nav nav-tabs" role="tablist">
                                 
                                 <li role="presentation" class="active">
-                                    <a href="#request-data-protection-for-object-stores-retrieve-an-object-from-the-object-store-responses-a648cfee-17f9-4cc5-aa59-0489cfcdf8ae" data-toggle="tab">
+                                    <a href="#request-data-protection-for-object-stores-generate-an-uri-to-download-an-object-responses-6325f80f-e59a-489a-b2c2-42c9a3087a9b" data-toggle="tab">
                                         
                                             Successful Object Encode URI
                                         
@@ -27946,7 +27971,7 @@ Accept: application/json</code></pre>
                                 </li>
                                 
                                 <li role="presentation">
-                                    <a href="#request-data-protection-for-object-stores-retrieve-an-object-from-the-object-store-responses-24c2b0e3-55d1-4ce9-9ef0-830e8430313e" data-toggle="tab">
+                                    <a href="#request-data-protection-for-object-stores-generate-an-uri-to-download-an-object-responses-886744fe-2070-4fb1-88b7-beefa9d98c12" data-toggle="tab">
                                         
                                             SuccessfulPre-Signed URL
                                         
@@ -27954,7 +27979,7 @@ Accept: application/json</code></pre>
                                 </li>
                                 
                                 <li role="presentation">
-                                    <a href="#request-data-protection-for-object-stores-retrieve-an-object-from-the-object-store-responses-fd353cba-3dfa-424b-b0f3-cfb0ffb69878" data-toggle="tab">
+                                    <a href="#request-data-protection-for-object-stores-generate-an-uri-to-download-an-object-responses-c6f14d04-cc1c-443b-b7db-73370738fc12" data-toggle="tab">
                                         
                                             Error: Retrieval
                                         
@@ -27962,7 +27987,7 @@ Accept: application/json</code></pre>
                                 </li>
                                 
                                 <li role="presentation">
-                                    <a href="#request-data-protection-for-object-stores-retrieve-an-object-from-the-object-store-responses-67d1c403-bbaf-4606-b454-90937ff7ae1d" data-toggle="tab">
+                                    <a href="#request-data-protection-for-object-stores-generate-an-uri-to-download-an-object-responses-3a27d9ec-febe-4641-8ee1-441216c00729" data-toggle="tab">
                                         
                                             Invalid request or Technical issue interrupted the processing
                                         
@@ -27972,7 +27997,7 @@ Accept: application/json</code></pre>
                             </ul>
                             <div class="tab-content">
                                 
-                                <div class="tab-pane active" id="request-data-protection-for-object-stores-retrieve-an-object-from-the-object-store-responses-a648cfee-17f9-4cc5-aa59-0489cfcdf8ae">
+                                <div class="tab-pane active" id="request-data-protection-for-object-stores-generate-an-uri-to-download-an-object-responses-6325f80f-e59a-489a-b2c2-42c9a3087a9b">
                                     <table class="table table-bordered">
                                         <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
                                         
@@ -27995,7 +28020,7 @@ Accept: application/json</code></pre>
                                     </table>
                                 </div>
                                 
-                                <div class="tab-pane" id="request-data-protection-for-object-stores-retrieve-an-object-from-the-object-store-responses-24c2b0e3-55d1-4ce9-9ef0-830e8430313e">
+                                <div class="tab-pane" id="request-data-protection-for-object-stores-generate-an-uri-to-download-an-object-responses-886744fe-2070-4fb1-88b7-beefa9d98c12">
                                     <table class="table table-bordered">
                                         <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
                                         
@@ -28018,7 +28043,7 @@ Accept: application/json</code></pre>
                                     </table>
                                 </div>
                                 
-                                <div class="tab-pane" id="request-data-protection-for-object-stores-retrieve-an-object-from-the-object-store-responses-fd353cba-3dfa-424b-b0f3-cfb0ffb69878">
+                                <div class="tab-pane" id="request-data-protection-for-object-stores-generate-an-uri-to-download-an-object-responses-c6f14d04-cc1c-443b-b7db-73370738fc12">
                                     <table class="table table-bordered">
                                         <tr><th style="width: 20%;">Status</th><td>200 OK</td></tr>
                                         
@@ -28037,7 +28062,7 @@ Accept: application/json</code></pre>
                                     </table>
                                 </div>
                                 
-                                <div class="tab-pane" id="request-data-protection-for-object-stores-retrieve-an-object-from-the-object-store-responses-67d1c403-bbaf-4606-b454-90937ff7ae1d">
+                                <div class="tab-pane" id="request-data-protection-for-object-stores-generate-an-uri-to-download-an-object-responses-3a27d9ec-febe-4641-8ee1-441216c00729">
                                     <table class="table table-bordered">
                                         <tr><th style="width: 20%;">Status</th><td>500 Internal Server Error</td></tr>
                                         
