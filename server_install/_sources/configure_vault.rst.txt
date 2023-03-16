@@ -1,0 +1,43 @@
+.. _sdss_vault:
+
+Step 2: Configure Service: Configure as a Vault
+-----------------------------------------------
+
+Enable the vault service. Set the following property in the ``docker-compose.yml`` file::
+
+	- sdv.enabled=true
+
+
+Configure Secure Search Index
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ When you configure Titaniam Server as a vault, you must also configure a secure search index (Titaniam plugin integrated with Elasticsearch). You must configure the following:
+
+1. Configure the following properties in the `arcus:` section of the `docker_compose_yml` file:
+ 
+   ::
+
+      - aws_region=us-east-2
+      - titaniam.keyring.name=<keyring-name>
+      - titaniam.store.type=aws
+      - titaniam.aws.access.id=<AWS_ACCESS_ID>
+      - titaniam.aws.secret.id=<AWS_SECRET_ID>
+      - node.name=arcus01
+      - http.port=9200
+
+#. Configure the following property in the ``spectra:`` section of the ``docker-compose.yml`` file:
+
+   ::
+
+      - spring.elasticsearch.rest.uris`: this property must match the IP and port of the elastic configured in the `arcus` section. 
+
+   For example:: 
+
+      - spring.elasticsearch.rest.uris=http://arcus:9200
+
+**Related Topics**
+
+* Previous Step: :ref:`lic_keys_aws`
+* Next Step: :ref:`compile_docker`
+
+

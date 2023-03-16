@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Step 7: Deploy Titaniam Server using Kubernetes &mdash; Titaniam Server Installation Guide for AWS 1.00a documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html">
+            <img src="_static/Primary lockup red_white.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html">What’s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#introduction">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#planning-your-installation">Planning your Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#platform-support-matrix">Platform Support Matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#poc-installation-with-secrets-in-local-file-system">POC Installation with Secrets in Local File System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#poc-installation-with-aws-secrets-manager">POC Installation with AWS Secrets Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#production-installation-using-kubernetes">Production Installation Using Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#production-installation-using-docker-on-ec2-instances">Production Installation Using Docker on EC2 Instances</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#appendix-titaniam-specific">Appendix: Titaniam-Specific</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#appendix-example-docker-compose-yml-files-and-property-files">Appendix: Example Docker Compose YML Files and Property Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#appendix-generic-concepts-and-tasks">Appendix: Generic Concepts and Tasks</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Titaniam Server Installation Guide for AWS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Step 7: Deploy Titaniam Server using Kubernetes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/kubernetes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="step-7-deploy-titaniam-server-using-kubernetes">
+<span id="deploy-kubernetes"></span><h1>Step 7: Deploy Titaniam Server using Kubernetes<a class="headerlink" href="#step-7-deploy-titaniam-server-using-kubernetes" title="Permalink to this heading"></a></h1>
+<p>This section explains how you can deploy Titaniam Server on Kubernetes using <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> and <code class="docutils literal notranslate"><span class="pre">helm</span> <span class="pre">chart</span></code>.</p>
+<p>You must already have kubernetes cluster deployed in your environment.</p>
+<section id="creating-kubernetes-cluster-on-eks">
+<h2>Creating Kubernetes Cluster on EKS<a class="headerlink" href="#creating-kubernetes-cluster-on-eks" title="Permalink to this heading"></a></h2>
+<p>If you have not already created a kubernetes cluster on EKS (Amazon Elastic Kubernetes Service), do so using this <a class="reference external" href="https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html">guide</a>.</p>
+</section>
+<section id="creating-kubernetes-cluster">
+<h2>Creating Kubernetes Cluster<a class="headerlink" href="#creating-kubernetes-cluster" title="Permalink to this heading"></a></h2>
+<p>If you are deploying the application on a Kubernetes cluster on a virtual machine from your cloud provider, then read this section.</p>
+<p>Use one of these guides to running Kubernetes on AWS EC2.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://kubernetes.io/docs/setup/production-environment/tools/kops/">Using kOps</a></p></li>
+<li><p><a class="reference external" href="https://jamesdefabia.github.io/docs/getting-started-guides/aws/">Using get-kube</a></p></li>
+</ul>
+</section>
+<section id="verifying-cluster-using-kubectl">
+<h2>Verifying Cluster using kubectl<a class="headerlink" href="#verifying-cluster-using-kubectl" title="Permalink to this heading"></a></h2>
+<p>After the cluster is created, the <cite>kubectl</cite> command refers to the newly created cluster.  However, you can verify the cluster that <cite>kubectl</cite> refers by using the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ kubectl config current-context
+</pre></div>
+</div>
+<p>The following command lists all clusters:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ kubectl config get-contexts
+</pre></div>
+</div>
+<p>The following example output illustrates the current kubectl context is pointing to a sample cluster. The <strong>CURRENT</strong> column is marked with <code class="docutils literal notranslate"><span class="pre">*</span></code> for the current cluster, which indicates that aws eks cluster is the current context which kubectl is referring.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ kubectl config get-contexts
+CURRENT   NAME                                                  CLUSTER                                   AUTHINFO                                              NAMESPACE
+   *      docker-desktop                                        docker-desktop                            docker-desktop
+          kind-kind                                             kind-kind                                 kind-kind
+          minikube                                              minikube                                  minikube                                              default
+</pre></div>
+</div>
+<p>There can be many cluster(for example minikube, staging-cluster or local-cluster), you can switch to any cluster using the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="n">config</span> <span class="n">use</span><span class="o">-</span><span class="n">context</span> <span class="o">&lt;</span><span class="n">cluster</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>The following command checks whether the cluster nodes are ready. The following example illustrates that the <code class="docutils literal notranslate"><span class="pre">minikube</span></code> cluster is ready for deploying kubernetes resources.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ kubectl get nodes
+NAME       STATUS   ROLES                  AGE   VERSION
+minikube   Ready    control-plane,master   25h   v1.23.3
+</pre></div>
+</div>
+</section>
+<section id="deployment">
+<h2>Deployment<a class="headerlink" href="#deployment" title="Permalink to this heading"></a></h2>
+<p>After the kubernetes cluster is avaiable, Titaniam server can be deployed using one of the following ways:</p>
+<ul class="simple">
+<li><p>Deployment using kubernetes yaml file</p></li>
+</ul>
+</section>
+<section id="deployment-using-kubernetes-yaml-file">
+<h2>Deployment Using Kubernetes yaml File<a class="headerlink" href="#deployment-using-kubernetes-yaml-file" title="Permalink to this heading"></a></h2>
+<p>You will need the following <code class="docutils literal notranslate"><span class="pre">yaml</span></code> files for deploying Titaniam Server in kubernetes</p>
+<ul class="simple">
+<li><p><strong>spectra-secret.yaml</strong> contains the access token encrypted in base64 format. Use this access token to pull images from Titaniam private repository.</p></li>
+<li><p><strong>spectra-configmap.yaml</strong> contains the environment variables.</p></li>
+<li><p><strong>spectra-deployment.yaml</strong> contains image details.</p></li>
+<li><p><strong>spectra-service.yaml</strong> used for accessing the app from outside the kubernetes cluster.</p></li>
+</ul>
+<ol class="arabic">
+<li><p>Execute the following sequence of commands on the kubernetes cluster.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="n">apply</span> <span class="o">-</span><span class="n">f</span> <span class="n">spectra</span><span class="o">-</span><span class="n">secret</span><span class="o">.</span><span class="n">yaml</span>
+
+<span class="n">kubectl</span> <span class="n">apply</span> <span class="o">-</span><span class="n">f</span> <span class="n">spectra</span><span class="o">-</span><span class="n">configmap</span><span class="o">.</span><span class="n">yaml</span>
+
+<span class="n">kubectl</span> <span class="n">apply</span> <span class="o">-</span><span class="n">f</span> <span class="n">spectra</span><span class="o">-</span><span class="n">deployment</span><span class="o">.</span><span class="n">yaml</span>
+
+<span class="n">kubectl</span> <span class="n">apply</span> <span class="o">-</span><span class="n">f</span> <span class="n">spectra</span><span class="o">-</span><span class="n">service</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Check the service list</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="n">get</span> <span class="n">svc</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This command lists the IP address or DNS name to access the application through the load balancer.</p>
+<p>For example,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">172.105.45.27</span><span class="p">:</span><span class="mi">8080</span>
+</pre></div>
+</div>
+<p>Now you must be able to access the Titaniam Server service at this URL.</p>
+</li>
+</ol>
+</section>
+<section id="checking-whether-all-kubernetes-resources-in-the-cluster-are-up-available">
+<h2>Checking whether all kubernetes resources in the cluster are up/available<a class="headerlink" href="#checking-whether-all-kubernetes-resources-in-the-cluster-are-up-available" title="Permalink to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kubectl</span> <span class="n">get</span> <span class="nb">all</span>
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NAME</span>                                      <span class="n">READY</span>   <span class="n">STATUS</span>    <span class="n">RESTARTS</span>   <span class="n">AGE</span>
+<span class="n">pod</span><span class="o">/</span><span class="n">spectra</span><span class="o">-</span><span class="n">deployment</span><span class="o">-</span><span class="mi">57468</span><span class="n">f8586</span><span class="o">-</span><span class="n">fvbvg</span>   <span class="mi">1</span><span class="o">/</span><span class="mi">1</span>     <span class="n">Running</span>   <span class="mi">0</span>          <span class="mi">19</span><span class="n">s</span>
+<span class="n">pod</span><span class="o">/</span><span class="n">spectra</span><span class="o">-</span><span class="n">deployment</span><span class="o">-</span><span class="mi">57468</span><span class="n">f8586</span><span class="o">-</span><span class="n">ws8mm</span>   <span class="mi">1</span><span class="o">/</span><span class="mi">1</span>     <span class="n">Running</span>   <span class="mi">0</span>          <span class="mi">19</span><span class="n">s</span>
+<span class="n">pod</span><span class="o">/</span><span class="n">spectra</span><span class="o">-</span><span class="n">deployment</span><span class="o">-</span><span class="mi">57468</span><span class="n">f8586</span><span class="o">-</span><span class="n">xdbqw</span>   <span class="mi">1</span><span class="o">/</span><span class="mi">1</span>     <span class="n">Running</span>   <span class="mi">0</span>          <span class="mi">19</span><span class="n">s</span>
+
+<span class="n">NAME</span>                      <span class="n">TYPE</span>           <span class="n">CLUSTER</span><span class="o">-</span><span class="n">IP</span>      <span class="n">EXTERNAL</span><span class="o">-</span><span class="n">IP</span>   <span class="n">PORT</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>          <span class="n">AGE</span>
+<span class="n">service</span><span class="o">/</span><span class="n">kubernetes</span>        <span class="n">ClusterIP</span>      <span class="mf">10.96.0.1</span>       <span class="o">&lt;</span><span class="n">none</span><span class="o">&gt;</span>        <span class="mi">443</span><span class="o">/</span><span class="n">TCP</span>          <span class="mi">7</span><span class="n">h3m</span>
+<span class="n">service</span><span class="o">/</span><span class="n">spectra</span><span class="o">-</span><span class="n">service</span>   <span class="n">LoadBalancer</span>   <span class="mf">10.101.205.25</span>   <span class="o">&lt;</span><span class="n">pending</span><span class="o">&gt;</span>     <span class="mi">8080</span><span class="p">:</span><span class="mi">30120</span><span class="o">/</span><span class="n">TCP</span>   <span class="mi">19</span><span class="n">s</span>
+
+<span class="n">NAME</span>                                 <span class="n">READY</span>   <span class="n">UP</span><span class="o">-</span><span class="n">TO</span><span class="o">-</span><span class="n">DATE</span>   <span class="n">AVAILABLE</span>   <span class="n">AGE</span>
+<span class="n">deployment</span><span class="o">.</span><span class="n">apps</span><span class="o">/</span><span class="n">spectra</span><span class="o">-</span><span class="n">deployment</span>   <span class="mi">3</span><span class="o">/</span><span class="mi">3</span>     <span class="mi">3</span>            <span class="mi">3</span>           <span class="mi">19</span><span class="n">s</span>
+
+<span class="n">NAME</span>                                            <span class="n">DESIRED</span>   <span class="n">CURRENT</span>   <span class="n">READY</span>   <span class="n">AGE</span>
+<span class="n">replicaset</span><span class="o">.</span><span class="n">apps</span><span class="o">/</span><span class="n">spectra</span><span class="o">-</span><span class="n">deployment</span><span class="o">-</span><span class="mi">57468</span><span class="n">f8586</span>   <span class="mi">3</span>         <span class="mi">3</span>         <span class="mi">3</span>       <span class="mi">19</span><span class="n">s</span>
+</pre></div>
+</div>
+</section>
+<section id="checking-the-log-of-a-running-pod">
+<h2>Checking the log of a running pod<a class="headerlink" href="#checking-the-log-of-a-running-pod" title="Permalink to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ kubectl logs pod/spectra-deployment-57468f8586-fvbvg
+ _____ _ _              _
+|_   _(_) |_ __ _ _ __ (_) __ _ _ __ ___
+  | | | | __/ _` | &#39;_ \| |/ _` | &#39;_ ` _ \
+  | | | | || (_| | | | | | (_| | | | | | |
+  |_| |_|\__\__,_|_| |_|_|\__,_|_| |_| |_|
+
+ ____                  _
+/ ___| _ __   ___  ___| |_ _ __ __ _
+\___ \| &#39;_ \ / _ \/ __| __| &#39;__/ _` |
+ ___) | |_) |  __/ (__| |_| | | (_| |
+|____/| .__/ \___|\___|\__|_|  \__,_|
+      |_|
+java -Xms512m -Xmx512m -DLOG_HOME=/var/log/granger -Dlogging.config=file:///usr/local/granger/logback.xml -jar /usr/local/granger/titaniam-server.jar --spring.config.location=file:///usr/local/granger/application.properties
+
+  .   ____          _            __ _ _
+ /\\ / ___&#39;_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | &#39;_ | &#39;_| | &#39;_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  &#39;  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.5.3)
+
+09:36:43.486 [INFO ] c.t.Application: Starting Application using Java 16.0.2 on spectra-deployment-57468f8586-fvbvg with PID 30 (/usr/local/granger/titaniam-server.jar started by titaniam in /usr/local/granger)
+09:36:43.530 [DEBUG] c.t.Application: Running with Spring Boot v2.5.3, Spring v5.3.9
+09:36:43.534 [INFO ] c.t.Application: No active profile set, falling back to default profiles: default
+09:36:56.131 [INFO ] o.s.d.r.c.RepositoryConfigurationDelegate: Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+09:36:57.972 [INFO ] o.s.d.r.c.RepositoryConfigurationDelegate: Finished Spring Data repository scanning in 1735 ms. Found 8 JPA repository interfaces.
+09:37:02.680 [INFO ] o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker: Bean &#39;application&#39; of type [com.titaniamlabs.Application$$EnhancerBySpringCGLIB$$c1b44626] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+09:37:03.552 [INFO ] o.h.v.i.u.Version: HV000001: Hibernate Validator 6.2.0.Final
+09:37:08.703 [INFO ] o.s.b.w.e.t.TomcatWebServer: Tomcat initialized with port(s): 8080 (http)
+09:37:08.826 [INFO ] o.a.c.h.Http11NioProtocol: Initializing ProtocolHandler [&quot;http-nio-8080&quot;]
+09:37:08.828 [INFO ] o.a.c.c.StandardService: Starting service [Tomcat]
+09:37:08.832 [INFO ] o.a.c.c.StandardEngine: Starting Servlet engine: [Apache Tomcat/9.0.50]
+09:37:09.322 [INFO ] o.a.c.c.C.[.[.[/]: Initializing Spring embedded WebApplicationContext
+09:37:09.323 [INFO ] o.s.b.w.s.c.ServletWebServerApplicationContext: Root WebApplicationContext: initialization completed in 25268 ms
+09:37:13.987 [INFO ] o.h.j.i.u.LogHelper: HHH000204: Processing PersistenceUnitInfo [name: default]
+09:37:14.780 [INFO ] o.h.Version: HHH000412: Hibernate ORM core version 5.4.32.Final
+09:37:15.970 [INFO ] o.h.a.c.Version: HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+09:37:16.868 [INFO ] c.z.h.HikariDataSource: HikariPool-1 - Starting...
+09:37:17.745 [INFO ] c.z.h.HikariDataSource: HikariPool-1 - Start completed.
+09:37:18.145 [INFO ] o.h.d.Dialect: HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
+09:37:27.961 [INFO ] o.h.e.t.j.p.i.JtaPlatformInitiator: HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+09:37:28.027 [INFO ] o.s.o.j.LocalContainerEntityManagerFactoryBean: Initialized JPA EntityManagerFactory for persistence unit &#39;default&#39;
+09:37:28.897 [DEBUG] c.t.a.s.AwsSeedStore: build secretsmanager
+09:37:29.005 [DEBUG] c.t.a.A.Builder: end - secretsmanager created successfully
+09:37:29.006 [DEBUG] c.t.a.s.AwsSeedStore: begin - build keyring using aws secretsmanager
+09:37:29.014 [DEBUG] c.t.a.AwsSecretsManagerImpl: List all secrets
+09:37:29.088 [DEBUG] c.t.a.AwsSecretsManagerImpl: Calling AWS SM. Iteration #: 0
+09:37:30.530 [DEBUG] c.t.a.AwsSecretsManagerImpl: Calling AWS SM. Iteration #: 1
+09:37:30.832 [DEBUG] c.t.a.AwsSecretsManagerImpl: Calling AWS SM. Iteration #: 2
+09:37:31.114 [DEBUG] c.t.a.AwsSecretsManagerImpl: AWS SM call iterations completed. Total iterations: 3
+09:37:31.115 [DEBUG] c.t.a.Utils: Fetching key: titaniam_key_ring/func-testing/func-test-001
+09:37:31.116 [DEBUG] c.t.a.AwsSecretsManagerImpl: Fetching key: titaniam_key_ring/func-testing/func-test-001
+09:37:31.388 [DEBUG] c.t.a.Utils: begin - Parsing value for: titaniam_key_ring/func-testing/func-test-001
+09:37:31.393 [DEBUG] c.t.a.Utils: end - &#39;titaniam_key_ring/func-testing/func-test-001&#39; value parsed successfully
+09:37:31.400 [DEBUG] c.t.a.Utils: Fetching key: titaniam_key_ring/func-testing/default-key-for-testing
+09:37:31.401 [DEBUG] c.t.a.AwsSecretsManagerImpl: Fetching key: titaniam_key_ring/func-testing/default-key-for-testing
+09:37:31.689 [DEBUG] c.t.a.Utils: begin - Parsing value for: titaniam_key_ring/func-testing/default-key-for-testing
+09:37:31.693 [DEBUG] c.t.a.Utils: end - &#39;titaniam_key_ring/func-testing/default-key-for-testing&#39; value parsed successfully
+09:37:31.709 [DEBUG] c.t.a.s.AwsSeedStore: SimpleKeyRing{keys=[default-key-for-testing, func-test-001], activeName=&#39;default-key-for-testing&#39;}
+09:37:31.719 [DEBUG] c.t.a.s.AwsSeedStore: end - keyring successfully created using aws secretsmanager
+09:37:31.906 [DEBUG] c.t.e.EventRegistry: register - com.titaniamlabs.crypto.engine.FieldLevelInitializationFactory
+09:37:31.934 [DEBUG] c.t.a.A.Builder: end - secretsmanager created successfully
+09:37:31.935 [DEBUG] c.t.a.AwsSecretsManagerImpl: Fetching key: titaniam.license
+09:37:33.104 [INFO ] c.t.a.l.AwsLicenseLoader: Loaded license
+09:37:33.109 [DEBUG] c.t.a.l.AwsLicenseLoader: Valid json license found
+09:37:33.110 [DEBUG] c.t.a.l.AwsLicenseLoader: License initialization from AWS successful
+09:37:41.031 [DEBUG] c.t.s.ESClient: sdss_store_prod v1.0 Schema already exists
+09:37:41.171 [DEBUG] c.t.s.RestClientManager: credentials found. creating provider with: 294lgnpkis
+09:37:41.187 [DEBUG] c.t.s.RestClientManager: trust store not set
+09:37:41.831 [DEBUG] c.t.s.ESClient: sdss-tangle-pipeline Pipeline already exists
+09:37:41.852 [DEBUG] c.t.s.ESClient: default-key-for-testing Index already exists
+09:37:41.891 [DEBUG] c.t.s.ESClient: sdss_store_prod Index alias already exists for default-key-for-testing Index
+09:37:49.436 [INFO ] o.s.b.a.e.w.EndpointLinksResolver: Exposing 1 endpoint(s) beneath base path &#39;/actuator&#39;
+09:37:49.696 [INFO ] o.a.c.h.Http11NioProtocol: Starting ProtocolHandler [&quot;http-nio-8080&quot;]
+09:37:49.815 [INFO ] o.s.b.w.e.t.TomcatWebServer: Tomcat started on port(s): 8080 (http) with context path &#39;&#39;
+09:37:49.983 [INFO ] c.t.Application: Started Application in 84.307 seconds (JVM running for 88.929)
+--&gt; Application Initialized &lt;--
+</pre></div>
+</div>
+</section>
+<section id="removing-the-kubernetes-resources-using-kubectl">
+<h2>Removing the kubernetes resources using kubectl<a class="headerlink" href="#removing-the-kubernetes-resources-using-kubectl" title="Permalink to this heading"></a></h2>
+<section id="removing-deployment">
+<h3>Removing deployment<a class="headerlink" href="#removing-deployment" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ kubectl delete deployment.apps/spectra-deployment
+deployment.apps &quot;spectra-deployment&quot; deleted
+user@host helm-chart % kubectl get all
+NAME                                      READY   STATUS        RESTARTS   AGE
+pod/spectra-deployment-57468f8586-29pzx   1/1     Terminating   0          13h
+pod/spectra-deployment-57468f8586-2cj6s   1/1     Terminating   0          13h
+pod/spectra-deployment-57468f8586-zf84x   1/1     Terminating   0          13h
+
+NAME                      TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+service/kubernetes        ClusterIP      10.96.0.1        &lt;none&gt;        443/TCP          24h
+service/spectra-service   LoadBalancer   10.107.107.188   &lt;pending&gt;     8080:30735/TCP   13h
+</pre></div>
+</div>
+</section>
+<section id="removing-service">
+<h3>Removing service<a class="headerlink" href="#removing-service" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ kubectl delete service/spectra-service
+</pre></div>
+</div>
+</section>
+<section id="removing-configmap">
+<h3>Removing configmap<a class="headerlink" href="#removing-configmap" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ kubectl delete configmap spectra-config
+configmap &quot;spectra-config&quot; deleted
+</pre></div>
+</div>
+</section>
+<section id="removing-secret">
+<h3>Removing secret<a class="headerlink" href="#removing-secret" title="Permalink to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ kubectl delete secret spectra-secret
+secret &quot;spectra-secret&quot; deleted
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Titaniam, Inc.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

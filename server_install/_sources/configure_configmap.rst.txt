@@ -1,0 +1,70 @@
+.. _config_configmap:
+
+Step 4: Configure ConfigMap
+===========================
+
+Specify the location of the encryption keys and ``titaniam.properties`` in a ``spectra-configmap.yaml`` file.
+
+.. only:: aws
+
+   Set the following properties:
+
+      :: 
+
+         - sdss.properties-source=aws.sm
+         - sdss.secretsmanager.properties.keyname=titaniam.properties
+         - sdss.aws.sm.region=<region>
+         - sdss.aws.sm.keyring-name=<keyring-name>
+         - sdss.seed.store.type=aws
+         - sdss.aws.sm.access-key=<AWS_ACCESS_ID>
+         - sdss.aws.sm.secret-key=<AWS_SECRET_ID>
+
+   Where,
+
+   * ``sdss.properties-source`` indicates that the configuration properties are stored in the AWS Secrets Manager.
+   * ``sdss.secretsmanager.properties.keyname`` specifies the key name of the configuration properties file. This must be set to ``titaniam.properties``.
+   * ``sdss.aws.sm.region`` indicates the region of the AWS Secrets Manager.
+   * ``sdss.aws.sm.keyring-name`` indicates the <keyring_name> from the Secrets Manager. Secret name is of the format - `titaniam_key_ring/<keyring_name>/<key_name>`.
+   * ``sdss.seed.store.type`` specifies that the keystore is in AWS. 
+   * ``sdss.aws.sm.access-key`` specifies the encrypted access key required by Titaniam Server to access the Secrets Manager. Ensure that you specify the encrypted value. You can encrypt your client ID using the zero-day encryption (see :ref:`zero-day-encrypt`).
+   * ``sdss.aws.sm.secret-key`` specifies the encrypted secret key required by Titaniam Server to access the Secrets Manager. Ensure that you specify the encrypted value. You can encrypt your client ID using the zero-day encryption (see :ref:`zero-day-encrypt`).
+
+   Following is a sample ``spectra-configmap.yaml`` file.
+
+   ..  literalinclude:: ../../common/_static/spectra-configmap.yml
+       :language: yaml
+
+.. only:: azure
+
+   ::
+
+         - sdss.properties-source=azure.kv
+         - sdss.secretsmanager.properties.keyname=titaniam.properties
+         - sdss.aws.sm.keyring-name=<keyring-name>
+         - sdss.seed.store.type=azure
+         - sdss.azure.client.id=<AZURE_CLIENT_ID>
+         - sdss.azure.client.secret=<AZURE_CLIENT_SECRET>
+         - sdss.azure.tenant.id=<AZURE_TENANT_ID>
+         - sdss.azure.keyvault.url=<AZURE_KEYVAULT_URL>
+
+   Where,
+
+   * ``sdss.properties-source`` indicates that the configuration properties are stored in the key vault.
+   * ``sdss.secretsmanager.properties.keyname`` specifies the key name of the configuration properties file. This must be set to ``titaniam.properties``.
+   * ``sdss.aws.sm.keyring-name`` indicates the <keyring_name> from the key vault. Secret name is of the format - `titaniamkeyring-<keyringname>-<keyname>`.
+   * ``sdss.seed.store.type`` specifies that the keystore is in key vault. 
+   * ``sdss.azure.client.id`` specifies the azure application client ID. Ensure that you specify the encrypted value. You can encrypt your client ID using the zero-day encryption (see :ref:`zero-day-encrypt`).
+   * ``sdss.azure.client.secret`` specifies the azure application password. Ensure that you specify the encrypted value. You can encrypt using the zero-day encryption (see :ref:`zero-day-encrypt`).
+   * ``sdss.azure.tenant.id`` specifies the tenant ID of the application in azure.
+   * ``sdss.azure.keyvault.url`` specifies the URL of the azure key vault.
+
+   Following is a sample ``spectra-configmap.yaml`` file.
+
+   ..  literalinclude:: ../../common/_static/spectra-configmap_azure.yml
+       :language: yaml
+
+**Related Topics**
+
+* Previous Step: :ref:`config_secret`
+* Next Step: :ref:`configure_cluster_service`
+

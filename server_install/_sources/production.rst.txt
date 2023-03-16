@@ -1,0 +1,43 @@
+****************************************
+Production Installation Using Kubernetes
+****************************************
+
+This section describes how you can deploy Titaniam Server using Kubernetes and Helm charts
+
+.. include:: ../../common/production_installation.rst
+
+.. include:: ../../common/AWS_ec2.rst
+
+.. include:: ../../common/aws_license.rst
+
+.. include:: ../../common/keygeneration.rst
+
+.. include:: ../../common/aws_application_properties.rst
+
+.. include:: ../../common/integrate_with_datastore_server.rst
+
+.. include:: configure_services.rst
+
+.. include:: configure_translation.rst
+
+.. include:: configure_vault_prod.rst
+
+.. include:: configure_proxy.rst
+
+.. include:: configure_elastic_proxy_prod.rst
+
+.. include:: configure_data_protection_service.rst
+
+.. include:: configure_secret.rst
+
+.. include:: configure_configmap.rst
+
+.. include:: configure_cluster_service.rst
+
+.. include:: configure_deployment.rst
+
+.. include:: kubernetes.rst
+
+.. include:: ../../common/zero_day_encrypt.rst
+
+.. include:: ../../common/common.rst

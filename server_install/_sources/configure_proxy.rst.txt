@@ -1,0 +1,61 @@
+.. _proxy_s3:
+
+Step 2: Configure Service: Proxy for the S3 Object Store
+--------------------------------------------------------
+
+You can use the Titaniam Server as an S3 proxy to protect any requests to an S3 bucket in the specified region. The following diagrams illustrate the configuration with and without the Titaniam Server as a proxy. When the Titaniam Server is configured as an proxy, it passes through the endpoint requests except the PUTObject and GETObject endpoints. These endpoints are intercepted by the Titaniam Proxy for S3 and the data is encrypted and decrypted. 
+
+.. image:: _static/proxy.png
+
+Enable the proxy service. You must set the following property and disable other services in the ``docker-compose.yml`` file::
+
+	- ripple.enabled=true
+  - amazon.s3.bucket-name=[bucket_name]
+  - amazon.s3.access-key=[access_key_id]
+  - amazon.s3.secret-key=[secret_access_key]
+
+  Where,
+
+     * ``amazon.s3.access-key`` and ``amazon.s3.secret-key`` are the access credentials for AWS S3. Ensure that you encrypt these using the zero-day encryption service. See :ref:`zero-day-encrypt`.
+     * ``amazon.s3.bucket-name``=<bucket_name> is the S3 bucket name.
+
+
+Configure your Application to Route Traffic to Titaniam S3 Proxy
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In your application, you must override the existing endpoint URL. You must now point the endpoint URL to the Titaniam S3 Proxy. 
+
+**If you are using AWS SDK V1**, modify the endpoint URL as follows:
+
+::
+
+  AmazonS3 s3 = AmazonS3ClientBuilder.standard()
+     .withEndpointConfiguration(new EndpointConfiguration(
+          "{{secureStoreURL}}/v2/titaniam-s3-proxy",
+          "region"))
+     .withCredentials(CREDENTIALS_PROVIDER)
+     .build();
+
+Where, you ``{secureStoreURL}}/v2/titaniam-s3-proxy`` points to the Titaniam S3 Proxy URL.
+
+**If you are using AWS SDK V2**, modify the endpoint URL as follows:
+
+::
+
+  URI endpointOverride = new URI("{{secureStoreURL}}/v2/titaniam-s3-proxy");
+  S3Client.builder()
+  .credentialsProvider(CREDENTIALS_PROVIDER)
+  .endpointOverride(endpointOverride)          
+  .region(region)
+  .build();
+
+
+Where, you ``{secureStoreURL}}/v2/titaniam-s3-proxy`` points to the Titaniam S3 Proxy URL.
+
+**If you are using boto3**, modify the endpoint URL during client creation as described `here <https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html>`__.
+
+**Related Topics**
+
+* Previous Step: :ref:`lic_keys_aws`
+* Next Step: :ref:`compile_docker`
+

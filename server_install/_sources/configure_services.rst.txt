@@ -1,0 +1,24 @@
+.. _configure_server:
+
+Step 2: Configure Services
+===========================
+You can choose to configure Titaniam Server as one of the following services:
+
+* Translation Service
+* Vault
+* Proxy for the object store
+* Elastic Proxy
+
+The following subsections describe the properties needed for each of the services:
+
+
+* :ref:`api_service`
+* :ref:`sdss_vault`
+* :ref:`proxy_s3`
+* :ref:`es_proxy`
+* :ref:`dp-service`
+
+**Related Topics**
+
+* Previous Step: :ref:`lic_keys_aws`
+* Next Step: :ref:`compile_docker`

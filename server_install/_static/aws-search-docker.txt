@@ -1,0 +1,127 @@
+---
+version: '3.7'
+
+# This docker-compose enables ssl for elastic.
+# Test certs/jks are available in the test-certs.zip
+
+services:
+  arcus:
+    image: titaniam/arcus:1.7.4
+    container_name: arcus-node1
+    environment:
+      # aws_region - region where the SM values are stored in AWS
+      # this configuraiton uses IAM roles to read data from AWS
+      # Assign proper IAM roles to the ec2 instances that will enable
+      # SecretsManagerReadWrite
+      - aws_region=us-east-2
+
+      # keyring_name is part of the Secrets Manager (SM) secret name.
+      # Secret name is of the format - titaniam_key_ring/<keyring_name>/<key_name>
+      # - Secret name must begin with titaniam_key_ring
+      # - <titaniam.keyring.name> is a custom name of the environment & deployment
+      # - <key_name> will correspond to the elastic index name
+      # Setting Active=true as a tag on Secrets Manager secret name will make that key default,
+      # when index level key is absent. (This will make index level keys default to a single key for new index)
+      - titaniam.keyring.name=exampleringname
+
+      # Possible values aws|byok|file|azure
+      # AWS Secrets Manager based keys - aws
+      # BYOK based key configuration - byok (see below for additional byok params)
+      # File based key store (use only in dev environments)
+      # Azure Key vault based keys - azure
+      - titaniam.store.type=aws
+      - aws_access_id=<AWS_ACCESS_ID>
+      - aws_secret_id=<AWS_SECRET_ID>
+
+      # byok configuration
+      #      - titaniam.store.type=byok
+      #      - titaniam.es.host=http://arcus:9200
+      #      - titaniam.byok.refresh-secs=30
+
+      # Elastic node name
+      - node.name=arcus01
+      - http.port=9200
+
+      # For development purposes only
+      # For multi-node cluster, remove this propery and add cluster related properties
+      - discovery.type=single-node
+      #- cluster.name=titaniam-vault-cluster
+      #- cluster.initial_master_nodes=arcus01,arcus02
+      # IP address of the "other" master-eligible hosts, comma separated.
+      #- discovery.seed_hosts=172.32.92.48
+
+      # Binds http.port to all IP address on the host.
+      - network.host=0.0.0.0
+
+      # The external IP published for this node in /_cat/nodes etc., for multi-node setup
+      #- network.publish_host=172.32.92.48
+      - node.roles=master, data, ingest
+      - gateway.recover_after_nodes=1
+      - transport.port=9300-9400
+
+      # Sets the log levels for all non-titaniam packages
+      - log_level_root=info
+
+      # Sets the log levels for all titaniam packages
+      - log_level_titaniam=info
+
+      # Required, shouldn't be changed across restarts of the container else data will be lost.
+      # This should reflect the external directory mount
+      # Ensure this directory is writable by uid=1000 and not root.
+      - path.data=/var/lib/arcusdata
+
+      # Sets the memory size of the java process. 512m is an example. Production setups
+      # should be ~4G or higher depending on use cases.
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - opendistro_security.disabled=true
+
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      # Important configuration that determines where Elasticsearch will store
+      # the data. This volume tells docker container how the host directory maps
+      # to directory inside docker container. Actual mapping to elastic is done
+      # using path.data environment variable above.
+      - /home/user/lib/arcusdata:/var/lib/arcusdata
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+kibana:
+    depends_on:
+      - arcus
+    image: docker.elastic.co/kibana/kibana-oss:7.9.1
+    volumes:
+      - /var/lib/kibanadata:/usr/share/kibana/data
+      - /home/ec2-user/certs:/usr/share/kibana/config/certs
+    ports:
+      - 5601:5601
+    environment:
+      - SERVERNAME=kibana
+      - ELASTICSEARCH_USERNAME=admin
+      - ELASTICSEARCH_PASSWORD=admin
+      - ELASTICSEARCH_HOSTS=https://node1.titaniamlabs.com:9200
+      - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=config/certs/root-ca.pem
+    extra_hosts:
+      - "node1.titaniamlabs.com:172.32.79.211"
+
+# Database service (Postgres)
+  spectra-postgres:
+    container_name: postgres
+    image: postgres:13.3-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: PoSSiBle
+      POSTGRES_DB: titaniam
+      PGDATA: /var/lib/postgresql/13/main
+    ports:
+      - "5432:5432"
+    volumes:
+      # Ensure this directory exists on the local filesystem
+      - /var/lib/postgresql/13/main:/var/lib/postgresql/13/main
+

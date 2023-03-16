@@ -1,0 +1,33 @@
+.. _config_deployment:
+
+Step 6: Configure Kubernetes Deployment File
+============================================
+
+When deploying Titaniam Server, ensure that you specify the number of replicas of this deployment. You can specify this in the ``spectra-deployment.yaml`` file.
+
+#. Specify the number of replicas in the ``replicas`` property.
+#. Specify the Titaniam Server configmap file using the following property:
+
+   ::
+
+     envFrom:
+            - configMapRef:
+                name: spectra-config
+
+#. Specify the secret token file needed to access the Titaniam Server images.
+
+   ::
+
+     imagePullSecrets:
+        - name: spectra-secret
+
+Following is a sample ``spectra-deployment.yaml`` file.
+
+..  literalinclude:: ../../common/_static/spectra-deployment.yml
+    :language: yaml
+
+**Related Topics**
+
+* Previous Step: :ref:`configure_cluster_service`
+* Next Step: :ref:`deploy_kubernetes`
+

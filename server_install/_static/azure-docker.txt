@@ -1,0 +1,64 @@
+---
+version: '3.7'
+
+# This docker-compose enables ssl for elastic.
+# Test certs/jks are available in the test-certs.zip
+
+services:
+  spectra:
+    image: titaniam/spectra:2.0.2
+    container_name: spectra_node1
+    ports:
+      - "8080:8080"
+    environment:
+      - jvm_args=-Xms512m -Xmx512m -Djavax.net.debug=ssl:handshake
+
+      # This property determines which secret name contains the
+      # configuration for spectra application. The contents of
+      # the property is included in Getting Started Guide.
+      - sdss.properties-source=azure.kv
+      - sdss.secretsmanager.properties.keyname=titaniam.properties
+
+
+      # This is the same as keyring_name environment variable above under arcus
+      # This value *must* match the value specified under arcus
+      - sdss.aws.sm.keyring-name=department1
+
+      # This must match the IP and port of the elastic configured
+      # in the arcus above.
+      # This is required only if spectra is enabled. (sdv.enabled: true in sdss.secretsmanager.properties.keyname secret)
+      - spring.elasticsearch.rest.uris=http://arcus:9200
+
+      # Disalbe single-sing-on
+      - sso.enabled=false
+      - spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration,org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
+
+      # Possible values aws|byok|file|azure
+      # AWS Secrets Manager based keys - aws
+      # BYOK based key configuration - byok (see below for additional byok params)
+      # File based key store (use only in dev environments)
+      # Azure Key vault based keys - azure
+      - sdss.seed.store.type=azure
+
+      # Azure Key Vault Config
+      - sdss.azure.client.id=<AZURE_CLIENT_ID>
+      - sdss.azure.client.secret=<AZURE_CLIENT_SECRET>
+      - sdss.azure.tenant.id=<AZURE_TENANT_ID>
+      - sdss.azure.keyvault.url=<AZURE_KEYVAULT_URL>
+
+      # byok configuration
+      # create an index named - titaniam_byok_config
+      # issues with doing BYOK with SSL??
+      #      - sdss.seed.store.type=byok
+      #      - sdss.byok.refresh-secs=30
+      #      - sdss.byok.host=http://arcus:9200
+
+      # Controls logging.
+      - log_level_root=info
+      - log_level_titaniam=info
+
+    volumes:
+    #   - /home/centos/certs/server.keys.jks:/usr/local/granger/key-store.jks
+    #   - /home/centos/certs/opotrun-server_truststore.jks:/usr/local/granger/trust-store.jks
+      - /var/log/granger:/var/log/granger
+

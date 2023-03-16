@@ -1,0 +1,14 @@
+.. _api_service:
+
+Step 2: Configure Service: Translation Service
+----------------------------------------------
+
+You must set the following property in the ``docker-compose.yml`` file and disable the other services::
+
+	- panther.enabled=true
+
+**Related Topics**
+
+* Previous Step: :ref:`lic_keys_aws`
+* Next Step: :ref:`compile_docker`
+

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Titaniam Server Installation Guide for AWS &mdash; Titaniam Server Installation Guide for AWS 1.00a documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="What’s New" href="hello_world_aws.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="#">
+            <img src="_static/Primary lockup red_white.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html">What’s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#introduction">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#planning-your-installation">Planning your Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#platform-support-matrix">Platform Support Matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#poc-installation-with-secrets-in-local-file-system">POC Installation with Secrets in Local File System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#poc-installation-with-aws-secrets-manager">POC Installation with AWS Secrets Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#production-installation-using-kubernetes">Production Installation Using Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#production-installation-using-docker-on-ec2-instances">Production Installation Using Docker on EC2 Instances</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#appendix-titaniam-specific">Appendix: Titaniam-Specific</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#appendix-example-docker-compose-yml-files-and-property-files">Appendix: Example Docker Compose YML Files and Property Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#appendix-generic-concepts-and-tasks">Appendix: Generic Concepts and Tasks</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Titaniam Server Installation Guide for AWS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+      <li>Titaniam Server Installation Guide for AWS</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="titaniam-server-installation-guide-for-aws">
+<span id="aws"></span><h1>Titaniam Server Installation Guide for AWS<a class="headerlink" href="#titaniam-server-installation-guide-for-aws" title="Permalink to this heading"></a></h1>
+<p>This document describes the Titaniam Server installation instructions and covers the following topics.</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html">What’s New</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#what-s-new-in-build-2-3-7">What’s New in Build 2.3.7</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#what-s-new-in-build-2-3-6">What’s New in Build 2.3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#what-s-new-in-build-2-3-5">What’s New in Build 2.3.5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#what-s-new-in-build-2-3-4">What’s New in Build 2.3.4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#what-s-new-in-build-2-3-1">What’s New in Build 2.3.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#what-s-new-in-build-2-3-0">What’s New in Build 2.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#what-s-new-in-build-2-2-1">What’s New in Build 2.2.1</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#introduction">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#product-matrix">Product Matrix</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#planning-your-installation">Planning your Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#layouts">Layouts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#platform-support-matrix">Platform Support Matrix</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#software-requirements">Software Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#hardware-requirements">Hardware Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#port-number-requirements">Port Number Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#roles">Roles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#poc-installation-with-secrets-in-local-file-system">POC Installation with Secrets in Local File System</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#titaniam-server-artifacts">Titaniam Server Artifacts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#install-process">Install Process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#installing-titaniam-services">Installing Titaniam Services</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#poc-installation-with-aws-secrets-manager">POC Installation with AWS Secrets Manager</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#id1">Titaniam Server Artifacts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#id2">Install Process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#step-1-supplying-configuration-values-and-keys-using-aws-secrets-manager">Step 1: Supplying Configuration Values and Keys using AWS Secrets Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#step-2-configure-services">Step 2: Configure Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#step-3-compose-the-docker-compose-yml-file">Step 3: Compose the docker-compose.yml File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#step-4-deploy-titaniam-server-using-docker">Step 4: Deploy Titaniam Server using Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#post-installation-steps">Post-Installation Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#production-installation-using-kubernetes">Production Installation Using Kubernetes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#production-installation-instructions">Production Installation Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#lic-keys-aws-ec2">Step 1: Supplying Configuration Values and Keys using AWS Secrets Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#id14">Step 2: Configure Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#step-3-configure-token-secret">Step 3: Configure Token Secret</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#step-4-configure-configmap">Step 4: Configure ConfigMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#step-5-make-service-available-outside-the-cluster">Step 5: Make Service Available Outside the Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#step-6-configure-kubernetes-deployment-file">Step 6: Configure Kubernetes Deployment File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#step-7-deploy-titaniam-server-using-kubernetes">Step 7: Deploy Titaniam Server using Kubernetes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#zero-day-encryption-service">Zero-day Encryption Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#id27">Post-Installation Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#production-installation-using-docker-on-ec2-instances">Production Installation Using Docker on EC2 Instances</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#configuration">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#id30">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#id31">Production Installation Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#id33">Step 1: Supplying Configuration Values and Keys using AWS Secrets Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#step-1-supplying-configuration-values-and-keys-using-local-file-system">Step 1: Supplying Configuration Values and Keys using Local File System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#step-2-installing-titaniam-plugin-and-kibana">Step 2: Installing Titaniam Plugin and Kibana</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#step-3-installing-postgresql-on-an-ec2-instance">Step 3: Installing PostgreSQL on an EC2 Instance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#step-4-installing-titaniam-server-and-configuring-as-a-vault">Step 4: Installing Titaniam Server and Configuring as a Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#step-5-integrating-with-the-data-store">Step 5: Integrating with the Data Store</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#step-6-configure-load-balancer">Step 6: Configure Load Balancer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#appendix-titaniam-specific">Appendix: Titaniam-Specific</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#id48">Zero-day Encryption Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#configure-tls-and-mtls-authentication">Configure TLS and mTLS Authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#configure-single-sign-on">Configure Single-Sign On</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#configure-authorization">Configure Authorization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#generate-keys">Generate Keys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#keyring-json">Keyring.JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#generate-an-encrypted-data-encryption-key-and-optionally-a-master-key">Generate an Encrypted Data Encryption Key and Optionally a Master Key</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#rekeying">Rekeying</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#bring-your-own-keys">Bring Your Own Keys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#rotating-vault-token-keys-using-krs">Rotating Vault Token Keys using KRS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#id64">Post-Installation Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#appendix-example-docker-compose-yml-files-and-property-files">Appendix: Example Docker Compose YML Files and Property Files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#example-docker-compose-yml-file-for-titaniam-plugin-using-aws">Example: Docker Compose YML File for Titaniam Plugin using AWS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#example-docker-compose-yml-file-for-titaniam-plugin-using-local-file-system">Example: Docker Compose YML File for Titaniam Plugin Using Local File System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#example-docker-compose-yml-file-for-titaniam-plugin-in-byok-mode">Example: Docker Compose YML File for Titaniam Plugin in BYOK Mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#example-docker-compose-yml-file-for-postgresql">Example: Docker Compose YML File for PostgreSQL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#example-docker-compose-yml-file-for-titaniam-server-using-aws">Example: Docker Compose YML File for Titaniam Server using AWS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#example-docker-compose-yml-file-for-titaniam-server">Example: Docker Compose YML File for Titaniam Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#example-docker-compose-yml-file-for-titaniam-server-in-byok-for-vault-and-elasticsearch-proxy">Example: Docker Compose YML File for Titaniam Server in BYOK for Vault and Elasticsearch Proxy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#example-docker-compose-yml-file-for-enabling-all-titaniam-services-and-properties-in-local-file-system">Example: Docker Compose YML File for Enabling All Titaniam Services and Properties in Local File System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#titaniam-properties-secret">titaniam.properties Secret</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#titaniam-properties-with-all-enabled-services">titaniam.properties with All Enabled Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#configure-additional-properties-in-titaniam-properties">Configure Additional Properties in titaniam.properties</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#appendix-generic-concepts-and-tasks">Appendix: Generic Concepts and Tasks</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#install-docker-and-docker-compose">Install Docker and Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hello_world_aws.html#aws-secrets-manager-supplying-secrets">AWS Secrets Manager: Supplying Secrets</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="hello_world_aws.html" class="btn btn-neutral float-right" title="What’s New" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Titaniam, Inc.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

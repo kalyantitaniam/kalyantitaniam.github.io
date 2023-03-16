@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Step 2: Configure Service: Elastic Proxy &mdash; Titaniam Server Installation Guide for AWS 1.00a documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html">
+            <img src="_static/Primary lockup red_white.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html">What’s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#introduction">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#planning-your-installation">Planning your Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#platform-support-matrix">Platform Support Matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#poc-installation-with-secrets-in-local-file-system">POC Installation with Secrets in Local File System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#poc-installation-with-aws-secrets-manager">POC Installation with AWS Secrets Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#production-installation-using-kubernetes">Production Installation Using Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#production-installation-using-docker-on-ec2-instances">Production Installation Using Docker on EC2 Instances</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#appendix-titaniam-specific">Appendix: Titaniam-Specific</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#appendix-example-docker-compose-yml-files-and-property-files">Appendix: Example Docker Compose YML Files and Property Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#appendix-generic-concepts-and-tasks">Appendix: Generic Concepts and Tasks</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Titaniam Server Installation Guide for AWS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Step 2: Configure Service: Elastic Proxy</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/configure_elastic_proxy_prod.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="step-2-configure-service-elastic-proxy">
+<span id="es-proxy"></span><h1>Step 2: Configure Service: Elastic Proxy<a class="headerlink" href="#step-2-configure-service-elastic-proxy" title="Permalink to this heading"></a></h1>
+<blockquote>
+<div><p>When you configure Titaniam Server as an elastic proxy, you must configure the following properties:</p>
+</div></blockquote>
+<ol class="arabic">
+<li><p>Create a folder on your virtual machine: <code class="docutils literal notranslate"><span class="pre">/var/lib/arcusdata</span></code>.</p></li>
+<li><p>Enable the elastic proxy service. Disable the other services. Set <code class="docutils literal notranslate"><span class="pre">sdss.esproxy.enabled</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code> in the <code class="docutils literal notranslate"><span class="pre">titaniam.properties</span></code> file:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;sdss.esproxy.enabled&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Configure the location of the keys:</p>
+<blockquote>
+<div><ol class="loweralpha">
+<li><p>(Optional) If you are using the active key from the AWS Secrets Manager, Configure the following properties in the <code class="docutils literal notranslate"><span class="pre">arcus:</span></code> section of the <code class="docutils literal notranslate"><span class="pre">spectra-configmap.yml</span></code> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">aws_region</span><span class="o">=</span><span class="n">us</span><span class="o">-</span><span class="n">east</span><span class="o">-</span><span class="mi">2</span>
+<span class="o">-</span> <span class="n">titaniam</span><span class="o">.</span><span class="n">keyring</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="n">vault</span><span class="o">-</span><span class="n">singlenode</span><span class="o">-</span><span class="n">byok</span>
+<span class="o">-</span> <span class="n">titaniam</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">type</span><span class="o">=</span><span class="n">aws</span>
+<span class="o">-</span> <span class="n">titaniam</span><span class="o">.</span><span class="n">aws</span><span class="o">.</span><span class="n">access</span><span class="o">.</span><span class="n">id</span><span class="o">=&lt;</span><span class="n">AWS_ACCESS_ID</span><span class="o">&gt;</span>
+<span class="o">-</span> <span class="n">titaniam</span><span class="o">.</span><span class="n">aws</span><span class="o">.</span><span class="n">secret</span><span class="o">.</span><span class="n">id</span><span class="o">=&lt;</span><span class="n">AWS_SECRET_ID</span><span class="o">&gt;</span>
+<span class="o">-</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="n">arcus01</span>
+<span class="o">-</span> <span class="n">http</span><span class="o">.</span><span class="n">port</span><span class="o">=</span><span class="mi">9200</span>
+<span class="o">-</span> <span class="n">indices</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">bool</span><span class="o">.</span><span class="n">max_clause_count</span><span class="o">=</span><span class="mi">2000</span>
+</pre></div>
+</div>
+</li>
+<li><p>(Optional) If using byok (bring your own key) mode,</p>
+<ol class="lowerroman">
+<li><p>In your <code class="docutils literal notranslate"><span class="pre">spectra-configmap.yml</span></code> file, configure the following lines of code in the <cite>arcus</cite> section:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># byok configuration</span>
+<span class="o">-</span> <span class="n">titaniam</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">type</span><span class="o">=</span><span class="n">byok</span>
+<span class="o">-</span> <span class="n">titaniam</span><span class="o">.</span><span class="n">es</span><span class="o">.</span><span class="n">host</span><span class="o">=</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">arcus</span><span class="p">:</span><span class="mi">9200</span>
+<span class="o">-</span> <span class="n">titaniam</span><span class="o">.</span><span class="n">byok</span><span class="o">.</span><span class="n">refresh</span><span class="o">-</span><span class="n">secs</span><span class="o">=</span><span class="mi">30</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>In your <cite>spectra-configmap.yml</cite> file, configure the following lines of code in the <cite>spectra</cite> section:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># byok configuration</span>
+<span class="o">-</span> <span class="n">sdss</span><span class="o">.</span><span class="n">seed</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">type</span><span class="o">=</span><span class="n">byok</span>
+<span class="o">-</span> <span class="n">sdss</span><span class="o">.</span><span class="n">byok</span><span class="o">.</span><span class="n">host</span><span class="o">=</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">arcus</span><span class="p">:</span><span class="mi">9200</span>
+<span class="o">-</span> <span class="n">sdss</span><span class="o">.</span><span class="n">byok</span><span class="o">.</span><span class="n">refresh</span><span class="o">-</span><span class="n">secs</span><span class="o">=</span><span class="mi">30</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+</li>
+</ol>
+</div></blockquote>
+</li>
+<li><p>Configure the following property in the <code class="docutils literal notranslate"><span class="pre">spectra:</span></code> section of the <code class="docutils literal notranslate"><span class="pre">spectra-configmap.yml</span></code> file:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">spring.elasticsearch.rest.uris=http://arcus:9200</span></code> indicates the URL of the Titaniam plugin.</p></li>
+<li><p>(Optional) <code class="docutils literal notranslate"><span class="pre">sdss.es.login=admin</span></code> indicates the admin login of the elastic node. This property is required only if you have installed Elasticsearch with authentication.</p></li>
+<li><p>(Optional) <code class="docutils literal notranslate"><span class="pre">sdss.es.password</span></code> provide the password after encrypting it with the master encryption key. This property is required only if you have installed Elasticsearch with authentication.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sdss.search.proxy.override.fields.&lt;INDEX_NAME&gt;.&lt;ABSOLUTE_FIELD_NAME&gt;=&lt;OVERRIDE_TYPE&gt;</span></code> specify any field properties in the elastic index that you want to override. For example, to return the values from the index as integers or boolean formats instead of strings. For example,</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sdss</span><span class="o">.</span><span class="n">search</span><span class="o">.</span><span class="n">proxy</span><span class="o">.</span><span class="n">override</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">example_index</span><span class="o">.</span><span class="n">days</span><span class="o">=</span><span class="n">integer</span>
+<span class="n">sdss</span><span class="o">.</span><span class="n">search</span><span class="o">.</span><span class="n">proxy</span><span class="o">.</span><span class="n">override</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">example_index</span><span class="o">.</span><span class="n">hours</span><span class="o">=</span><span class="n">integer</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Related Topics</strong></p>
+<ul class="simple">
+<li><p><span class="xref std std-ref">ingest_byok</span></p></li>
+<li><p>Previous Step: <a class="reference internal" href="single_node.html#integrate-data-store"><span class="std std-ref">Integrating with the Data Store</span></a></p></li>
+<li><p>Next Step: <span class="xref std std-ref">tls</span></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Titaniam, Inc.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

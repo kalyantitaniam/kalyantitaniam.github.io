@@ -1,0 +1,25 @@
+.. _dp-service:
+
+Step 2: Configure Service: Data Protection Service for Object Store
+-------------------------------------------------------------------
+
+The Titaniam Server can be used as a data protection service for an object store. The data protection service for object stores lets you encrypt and decrypt objects in your object stores. Currently, AWS S3 is supported. This service lets you do the following operations:
+
+* Encrypt an object in-place in the object store. You must pass on the object reference to the data protection service.
+* Generate an encoded URI to an object. You can use this URI to download the object in clear format.
+
+
+To enable the data-protection service, do the following:
+
+
+1. (Configure at least one object store service) For example, If you are protecting objects in an AWS S3 object store, you must configure the Titaniam S3 proxy related properties (see :ref:`_proxy_s3`).
+
+#. Set the following property file::
+
+     sdss.data.protection.enabled=true
+
+**Related Topics**
+
+* Previous Step: :ref:`lic_keys_aws`
+* Next Step: :ref:`compile_docker`
+

@@ -1,0 +1,68 @@
+.. _es_proxy:
+
+Step 2: Configure Service: Elastic Proxy
+----------------------------------------
+
+ When you configure Titaniam Server as an elastic proxy, you must configure the following properties:
+
+1. Create a folder on your virtual machine: ``/var/lib/arcusdata``.
+
+#. Enable the elastic proxy service. Disable the other services. Set the following property in the ``docker-compose.yml`` file:
+
+    ::
+
+       - sdss.esproxy.enabled=true
+
+#. Configure the location of the keys:
+
+    a. (Optional) If you are using the active key from the AWS Secrets Manager, Configure the following properties in the ``arcus:`` section of the ``docker-compose.yml`` file::
+
+          - aws_region=us-east-2
+          - titaniam.keyring.name=vault-singlenode-byok
+          - titaniam.store.type=aws
+          - titaniam.aws.access.id=<AWS_ACCESS_ID>
+          - titaniam.aws.secret.id=<AWS_SECRET_ID>
+          - node.name=arcus01
+          - http.port=9200
+          - indices.query.bool.max_clause_count=2000
+
+    #. (Optional) If using byok (bring your own key) mode, 
+
+       i. In your ``docker-compose.yml`` file, configure the following lines of code in the `arcus` section:
+
+           ::
+           
+                # byok configuration
+                - titaniam.store.type=byok
+                - titaniam.es.host=http://arcus:9200
+                - titaniam.byok.refresh-secs=30
+
+
+       #. In your `docker-compose.yml` file, configure the following lines of code in the `spectra` section:
+
+           ::
+           
+                # byok configuration
+                - sdss.seed.store.type=byok
+                - sdss.byok.host=http://arcus:9200
+                - sdss.byok.refresh-secs=30
+
+
+#. Configure the following property in the ``spectra:`` section of the ``docker-compose.yml`` file:
+
+   * ``spring.elasticsearch.rest.uris=http://arcus:9200`` indicates the URL of the Titaniam plugin.
+   * (Optional) ``sdss.es.login=admin`` indicates the admin login of the elastic node. This property is required only if you have installed Elasticsearch with authentication.
+   * (Optional) ``sdss.es.password`` provide the password after encrypting it with the master encryption key. This property is required only if you have installed Elasticsearch with authentication.
+   * ``sdss.search.proxy.override.fields.<INDEX_NAME>.<ABSOLUTE_FIELD_NAME>=<OVERRIDE_TYPE>`` specify any field properties in the elastic index that you want to override. For example, to return the values from the index as integers or boolean formats instead of strings. For example,
+
+   ::
+
+     sdss.search.proxy.override.fields.example_index.days=integer
+     sdss.search.proxy.override.fields.example_index.hours=integer
+
+
+**Related Topics**
+
+* :ref:`byok_keys`
+* Previous Step: :ref:`lic_keys_aws`
+* Next Step: :ref:`compile_docker`

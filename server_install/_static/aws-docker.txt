@@ -1,0 +1,56 @@
+---
+version: '3.7'
+
+# This docker-compose enables ssl for elastic.
+# Test certs/jks are available in the test-certs.zip
+
+services:
+  spectra:
+    image: titaniam/spectra:2.0.2
+    container_name: spectra_node1
+    ports:
+      - "8080:8080"
+    environment:
+      - jvm_args=-Xms512m -Xmx512m -Djavax.net.debug=ssl:handshake
+
+      # This property determines which secret name contains the
+      # configuration for spectra application. The contents of
+      # the property is included in Getting Started Guide.
+      - sdss.properties-source=aws.sm
+      - sdss.secretsmanager.properties.keyname=titaniam.properties
+
+      # This is the same as aws_region environment variable above under arcus
+      - sdss.aws.sm.region=us-east-2
+
+      # This is the same as keyring_name environment variable above under arcus
+      # This value *must* match the value specified under arcus
+      - sdss.aws.sm.keyring-name=exampleringname
+
+      # Possible values aws|byok|file|azure
+      # AWS Secrets Manager based keys - aws
+      # BYOK based key configuration - byok (see below for additional byok params)
+      # File based key store (use only in dev environments)
+      # Azure Key vault based keys - azure
+      - sdss.seed.store.type=aws
+      - sdss.aws.sm.access-key=<AWS_ACCESS_ID>
+      - sdss.aws.sm.secret-key=<AWS_SECRET_ID>
+
+      # byok configuration
+      # create an index named - titaniam_byok_config
+      # issues with doing BYOK with SSL??
+      #      - sdss.seed.store.type=byok
+      #      - sdss.byok.refresh-secs=30
+      #      - sdss.byok.host=http://arcus:9200
+
+      # S3 file mgmt
+      - amazon.s3.region=us-east-2
+
+      # Controls logging.
+      - log_level_root=info
+      - log_level_titaniam=info
+
+
+    volumes:
+    #   - /home/centos/certs/server.keys.jks:/usr/local/granger/key-store.jks
+        - /var/log/granger:/var/log/granger
+

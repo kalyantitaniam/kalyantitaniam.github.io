@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>POC Installation with AWS Secrets Manager &mdash; Titaniam Server Installation Guide for AWS 1.00a documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html">
+            <img src="_static/Primary lockup red_white.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html">What’s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#introduction">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#planning-your-installation">Planning your Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#platform-support-matrix">Platform Support Matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#poc-installation-with-secrets-in-local-file-system">POC Installation with Secrets in Local File System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#poc-installation-with-aws-secrets-manager">POC Installation with AWS Secrets Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#production-installation-using-kubernetes">Production Installation Using Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#production-installation-using-docker-on-ec2-instances">Production Installation Using Docker on EC2 Instances</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#appendix-titaniam-specific">Appendix: Titaniam-Specific</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#appendix-example-docker-compose-yml-files-and-property-files">Appendix: Example Docker Compose YML Files and Property Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#appendix-generic-concepts-and-tasks">Appendix: Generic Concepts and Tasks</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Titaniam Server Installation Guide for AWS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>POC Installation with AWS Secrets Manager</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/single_node.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="poc-installation-with-aws-secrets-manager">
+<h1>POC Installation with AWS Secrets Manager<a class="headerlink" href="#poc-installation-with-aws-secrets-manager" title="Permalink to this heading"></a></h1>
+<p>This section describes how you can install all Titaniam Server components on a virtual machine.</p>
+<section id="titaniam-server-artifacts">
+<h2>Titaniam Server Artifacts<a class="headerlink" href="#titaniam-server-artifacts" title="Permalink to this heading"></a></h2>
+<p>Obtain the following installation artifacts from Titaniam support:</p>
+<ul>
+<li><p>Images:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Titaniam-Server</p></li>
+</ul>
+<ul class="simple">
+<li><p>Search Engine with the Titaniam Plugin pre-installed</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Docker Compose template</p></li>
+<li><p>License file and SHA Checksum</p></li>
+<li><p>Titaniam docker images are available in a private repository in Docker Hub. You need an access token to download the images. Contact Titaniam support to get your access token.</p></li>
+</ul>
+</section>
+<section id="install-process">
+<h2>Install Process<a class="headerlink" href="#install-process" title="Permalink to this heading"></a></h2>
+<ol class="arabic">
+<li><p>Store the following as secrets:</p>
+<ol class="loweralpha simple">
+<li><p>License</p></li>
+<li><p>Titaniam Server application properties</p></li>
+<li><p>Encryption keys</p></li>
+</ol>
+</li>
+<li><p>Configure Titaniam Server as one of the following services:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Translation Service</p></li>
+<li><p>Vault</p></li>
+<li><p>Proxy for the object store</p></li>
+<li><p>Elastic Proxy</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Generate the <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file.</p></li>
+<li><p>Bring up the Titaniam Server service using <code class="docutils literal notranslate"><span class="pre">docker-compose</span></code>.</p></li>
+</ol>
+<blockquote>
+<div></div></blockquote>
+</section>
+<section id="step-1-supplying-configuration-values-and-keys-using-aws-secrets-manager">
+<span id="lic-keys-aws"></span><h2>Step 1: Supplying Configuration Values and Keys using AWS Secrets Manager<a class="headerlink" href="#step-1-supplying-configuration-values-and-keys-using-aws-secrets-manager" title="Permalink to this heading"></a></h2>
+<p>Titaniam supports supplying all the application properties, licenses, and encryption keys through a secret entry in AWS Secrets Manager. The advantage of doing this is that you can maintain the configuration settings centrally instead of storing the settings in each server node.</p>
+<p>Use this procedure (<span class="xref std std-ref">supplying_secrets</span>) here to create the following new secrets:</p>
+<ul class="simple">
+<li><p>Titaniam License (see <a class="reference internal" href="#license"><span class="std std-ref">Step 1.a: Content of titaniam.license secret</span></a>)</p></li>
+<li><p>Data Encryption keys (see <a class="reference internal" href="#key-generation"><span class="std std-ref">Step 1.b: Store Encryption Keys</span></a>)</p></li>
+<li><p>Configuration properties (see <a class="reference internal" href="#configuration-settings"><span class="std std-ref">Step 1.c: Create Configuration Settings</span></a>)</p></li>
+</ul>
+<p><strong>Related Topics</strong></p>
+<ul class="simple">
+<li><p>Next Step: <a class="reference internal" href="#configure-server"><span class="std std-ref">Step 2: Configure Services</span></a></p></li>
+</ul>
+<section id="step-1-a-content-of-titaniam-license-secret">
+<span id="license"></span><h3>Step 1.a: Content of titaniam.license secret<a class="headerlink" href="#step-1-a-content-of-titaniam-license-secret" title="Permalink to this heading"></a></h3>
+<p>The following content can be copied and pasted as a secret named <code class="docutils literal notranslate"><span class="pre">titaniam.license</span></code> in the PlainText view.</p>
+<p>The secret name can be of the following formats:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;titaniam.license</span></code>. <code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;</span></code> is the value of the property <code class="docutils literal notranslate"><span class="pre">titaniam.secrets.prefix</span></code> from the <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">titaniam.license</span></code> if you have not specified the property <code class="docutils literal notranslate"><span class="pre">titaniam.secrets.prefix</span></code>.</p></li>
+</ul>
+<p>The values provided here are just examples. Edit it to reflect the
+license file and SHA that you received from Titaniam Support before you
+save the secret. Occasionally the license file may include an expiry date. You can leave that in place. It does not affect the behavior.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+
+<span class="s2">&quot;digest&quot;</span><span class="p">:</span> <span class="s2">&quot;P9r7miQDNOf/0HWg8WQjBotJ79PP6WTw+0BQ9VT/fXQ=&quot;</span><span class="p">,</span>
+
+<span class="s2">&quot;license&quot;</span><span class="p">:</span><span class="s2">&quot;vwOraInV23PJ2ePSqHmsnULtSfi98AYO2NHJDCv3f39INv4c9xIGiry3fyW19iZ3nOpIb3QI2akOSg0I6/CZvweoozFtZnP3xqWWXL6t4hhCBNuCdpWGh3XCAVN2xXb5u8S55GjTeWs3IZz5JnHOTSPUCBunicy2TSPNmo/4ScNM7fQagyrqxsiQphq9hnU8vmngQ4E3udqIh086S++2ERk+nki/TDpMWpOxCVcf3ZdnVo+Ra+Tw01MIOxeM3PuRzFMAVJNyGb7BumDfmN6wOlnzpXoVKkDSfQwD1pwkpJcMpKcX8uJMmPo0fJ022w3j0bjMsHy/buMeUybRSdjYUzrIrNosrjDJtoCgel8ygOrscUf9HnJFIziRSd2wCzNpyZyJFUKWhV7LHATPigmeXoHHqWlND0f5YECdvlqLdZXnZllYxuv/xOAIPKzjSyN+GeESmoQavFTNL14XGSKw6Xz825iBdyRJkGW/JsYClBemBRQelgkoxerBTyq80CcSmaie5UdblYuMwTXr13sySWJbX7VdKMKoReRGun+vphHBQnTDPIagb1AiYnsOjSMYdK03SZvGjuujzwRwgn23m9pBJL3iaGTP+1cTrqN/b6FijTsAzxU55Ny3YbQ54f4zM7g0lk0wZepPtPpTG3hx6D83StcNaXRxRx5u3YB5ET8=&quot;</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Related Topics</strong></p>
+<ul class="simple">
+<li><p><span class="xref std std-ref">supplying_secrets</span></p></li>
+</ul>
+</section>
+<section id="step-1-b-store-encryption-keys">
+<span id="key-generation"></span><h3>Step 1.b: Store Encryption Keys<a class="headerlink" href="#step-1-b-store-encryption-keys" title="Permalink to this heading"></a></h3>
+<p>You have two options of using the data encryption keys.</p>
+<ul>
+<li><p>Option 1, Storing Encrypted Data Keys: Includes a master key (also called as Key Encryption Key, KEK) and one or more data encryption keys. The data encryption keys are encoded using the master key before adding them to the AWS Secrets Manager. You can select one of the data encryption keys as an active key.</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p>Generate an encrypted data encryption key and optionally a master key. If you have an existing master key, you can choose not to generate the master key. See <a class="reference internal" href="hello_world_aws.html#keygen2"><span class="std std-ref">Generate an Encrypted Data Encryption Key and Optionally a Master Key</span></a>.</p></li>
+<li><p>Store the master key as <code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;titaniam_key_ring/&lt;department&gt;/titaniam_key_encryption_key</span></code> or <code class="docutils literal notranslate"><span class="pre">titaniam_key_ring/&lt;department&gt;/titaniam_key_encryption_key</span></code>. This key is the master encryption key.</p></li>
+<li><p>Store the encrypted data key as a secret: <code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;titaniam_key_ring/&lt;keyring_name&gt;/&lt;INDEX_NAME&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">titaniam_key_ring/&lt;keyring_name&gt;/&lt;INDEX_NAME&gt;</span></code>.</p>
+<p>Titaniam Server uses only keys that have the <code class="docutils literal notranslate"><span class="pre">Active</span></code> tag.</p>
+</li>
+</ol>
+</div></blockquote>
+</li>
+<li><p>Option 2, Storing Plain Data Keys: Generate a data encryption key and store it as a Secret in the AWS Secrets Manager. You are not encrypting the data encryption key with a master key in this case. See <a class="reference internal" href="hello_world_aws.html#master-key"><span class="std std-ref">Generate Keys</span></a>.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ol class="lowerroman simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;</span></code> is the string from the property <code class="docutils literal notranslate"><span class="pre">titaniam.secrets.prefix</span></code> in the <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file. If you have not mentioned the <code class="docutils literal notranslate"><span class="pre">titaniam.secrets.prefix</span></code> property, the secret name must be of the format <code class="docutils literal notranslate"><span class="pre">titaniam_key_ring/&lt;keyring_name&gt;/&lt;INDEX_NAME&gt;</span></code> for data encryption key and <code class="docutils literal notranslate"><span class="pre">titaniam_key_ring/&lt;department&gt;/titaniam_key_encryption_key</span></code> for master encryption key.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">titaniam_key_ring</span></code> must be entered <strong>as is</strong>. This is the namespace that Titaniam server looks for when loading the encryption keys.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;keyring_name&gt;</span></code> is the name of the keyring. This name distinguishes different Titaniam installations. Decide a name for the Titaniam Server installation (for example <cite>production_finance</cite>, <cite>dev_sandbox</cite>).</p></li>
+</ol>
+</div>
+<p><strong>Related Topics</strong></p>
+<ul class="simple">
+<li><p><span class="xref std std-ref">supplying_secrets</span></p></li>
+</ul>
+</section>
+<section id="step-1-c-create-configuration-settings">
+<span id="configuration-settings"></span><h3>Step 1.c: Create Configuration Settings<a class="headerlink" href="#step-1-c-create-configuration-settings" title="Permalink to this heading"></a></h3>
+<p>Populate the rest of the configuration settings in a secret.</p>
+<ol class="arabic simple">
+<li><p>Create a new secret called <code class="docutils literal notranslate"><span class="pre">titaniam.properties</span></code>.</p></li>
+<li><p>Copy and paste the <a class="reference internal" href="hello_world_aws.html#sdss-properties"><span class="std std-ref">titaniam.properties Secret</span></a>
+to the secret using PlainText view.</p></li>
+<li><p>Edit the entries to reflect your installation reality. Pay attention
+to these specifically:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#integrate-data-store"><span class="std std-ref">Integrating with the Data Store</span></a></p></li>
+<li><p><a class="reference internal" href="hello_world_aws.html#mtls"><span class="std std-ref">Configure TLS and mTLS Authentication</span></a></p></li>
+<li><p><a class="reference internal" href="hello_world_aws.html#auth-token"><span class="std std-ref">Configure Authorization</span></a></p></li>
+<li><p><a class="reference internal" href="hello_world_aws.html#configure-misc"><span class="std std-ref">Configure Additional Properties in titaniam.properties</span></a></p></li>
+</ul>
+</li>
+<li><p>Save the secret.</p></li>
+</ol>
+<p><strong>Related Topics</strong></p>
+<ul class="simple">
+<li><p><span class="xref std std-ref">supplying_secrets</span></p></li>
+</ul>
+<blockquote>
+<div></div></blockquote>
+<section id="integrating-with-the-data-store">
+<span id="integrate-data-store"></span><h4>Integrating with the Data Store<a class="headerlink" href="#integrating-with-the-data-store" title="Permalink to this heading"></a></h4>
+<p>Titaniam Server uses a datastore to store the metadata and schema versions. After you install the Titaniam Server, you must ensure that the Titaniam Server can communicate with the data store.</p>
+<ol class="arabic">
+<li><p>Open the <code class="docutils literal notranslate"><span class="pre">titaniam.properties</span></code> file and edit the sections corresponding to the database you are using.</p></li>
+<li><p>(If using MySQL) Specify the following properties:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;spring.datasource.url&quot;</span><span class="p">:</span> <span class="s2">&quot;jdbc:mysql:&lt;database_URL&gt;&quot;</span><span class="p">,</span>
+<span class="s2">&quot;spring.datasource.username&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;username&gt;&quot;</span><span class="p">,</span>
+<span class="s2">&quot;spring.datasource.password&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;password&gt;&quot;</span><span class="p">,</span>
+<span class="s2">&quot;spring.datasource.driver-class-name&quot;</span><span class="p">:</span> <span class="s2">&quot;com.mysql.cj.jdbc.Driver&quot;</span><span class="p">,</span>
+<span class="s2">&quot;spring.jpa.properties.hibernate.format_sql&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span>
+<span class="s2">&quot;spring.jpa.properties.hibernate.dialect&quot;</span><span class="p">:</span> <span class="s2">&quot;org.hibernate.dialect.MySQL57InnoDBDialect&quot;</span><span class="p">,</span>
+<span class="s2">&quot;spring.datasource.hikari.minimumIdle&quot;</span><span class="p">:</span> <span class="s2">&quot;5,</span>
+<span class="s2">&quot;spring.jpa.hibernate.ddl-auto&quot;</span><span class="p">:</span> <span class="s2">&quot;update&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>(If using MariaDB) Specify the following properties:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;spring.datasource.url&quot;</span><span class="p">:</span> <span class="s2">&quot;jdbc:mariadb:&lt;database_URL&gt;&quot;</span><span class="p">,</span>
+<span class="s2">&quot;spring.datasource.username&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;username&gt;&quot;</span><span class="p">,</span>
+<span class="s2">&quot;spring.datasource.password&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;password&gt;&quot;</span><span class="p">,</span>
+<span class="s2">&quot;spring.datasource.driver-class-name&quot;</span><span class="p">:</span> <span class="s2">&quot;org.mariadb.jdbc.Driver&quot;</span><span class="p">,</span>
+<span class="s2">&quot;spring.jpa.properties.hibernate.format_sql&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span>
+<span class="s2">&quot;spring.jpa.properties.hibernate.dialect&quot;</span><span class="p">:</span> <span class="s2">&quot;org.hibernate.dialect.MariaDB53Dialect&quot;</span><span class="p">,</span>
+<span class="s2">&quot;spring.datasource.hikari.minimumIdle&quot;</span><span class="p">:</span> <span class="s2">&quot;5,</span>
+<span class="s2">&quot;spring.jpa.hibernate.ddl-auto&quot;</span><span class="p">:</span> <span class="s2">&quot;update&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>(If using PostgreSQL) Specify the following properties:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;spring.datasource.url&quot;</span><span class="p">:</span> <span class="s2">&quot;jdbc:postgresql&lt;database_URL&gt;&quot;</span><span class="p">,</span>
+<span class="s2">&quot;spring.datasource.username&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;username&gt;&quot;</span><span class="p">,</span>
+<span class="s2">&quot;spring.datasource.password&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;password&gt;&quot;</span><span class="p">,</span>
+<span class="s2">&quot;spring.datasource.driver-class-name&quot;</span><span class="p">:</span> <span class="s2">&quot;org.postgresql.Driver&quot;</span><span class="p">,</span>
+<span class="s2">&quot;spring.jpa.properties.hibernate.format_sql&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span>
+<span class="s2">&quot;spring.jpa.properties.hibernate.dialect&quot;</span><span class="p">:</span> <span class="s2">&quot;org.hibernate.dialect.PostgreSQL10Dialect&quot;</span><span class="p">,</span>
+<span class="s2">&quot;spring.datasource.hikari.minimumIdle&quot;</span><span class="p">:</span> <span class="s2">&quot;5,</span>
+<span class="s2">&quot;spring.jpa.hibernate.ddl-auto&quot;</span><span class="p">:</span> <span class="s2">&quot;update&quot;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Where,</p>
+<ul>
+<li><p>&lt;database_URL&gt; is the URL (including the port) where you can access the database. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">PostgresSQL</span><span class="p">)</span><span class="c1">#spring.datasource.url=jdbc:postgresql://tlab1/titaniam_v1</span>
+<span class="p">(</span><span class="n">MySQL</span><span class="p">)</span>      <span class="c1">#spring.datasource.url=jdbc:mysql://localhost:3306/testdb</span>
+<span class="p">(</span><span class="n">MariaDB</span><span class="p">)</span>    <span class="c1">#spring.datasource.url=jdbc:mariadb://localhost:3306/testdb</span>
+</pre></div>
+</div>
+</li>
+<li><p>&lt;username&gt; is the username for accessing the database.</p></li>
+<li><p>&lt;password&gt; is the password required to access the database.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="step-2-configure-services">
+<span id="configure-server"></span><h2>Step 2: Configure Services<a class="headerlink" href="#step-2-configure-services" title="Permalink to this heading"></a></h2>
+<p>You can choose to configure Titaniam Server as one of the following services:</p>
+<ul class="simple">
+<li><p>Translation Service</p></li>
+<li><p>Vault</p></li>
+<li><p>Proxy for the object store</p></li>
+<li><p>Elastic Proxy</p></li>
+</ul>
+<p>The following subsections describe the properties needed for each of the services:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#api-service"><span class="std std-ref">Step 2: Configure Service: Translation Service</span></a></p></li>
+<li><p><a class="reference internal" href="#sdss-vault"><span class="std std-ref">Step 2: Configure Service: Configure as a Vault</span></a></p></li>
+<li><p><a class="reference internal" href="#proxy-s3"><span class="std std-ref">Step 2: Configure Service: Proxy for the S3 Object Store</span></a></p></li>
+<li><p><a class="reference internal" href="#es-proxy"><span class="std std-ref">Step 2: Configure Service: Elastic Proxy</span></a></p></li>
+<li><p><a class="reference internal" href="#dp-service"><span class="std std-ref">Step 2: Configure Service: Data Protection Service for Object Store</span></a></p></li>
+</ul>
+<p><strong>Related Topics</strong></p>
+<ul class="simple">
+<li><p>Previous Step: <a class="reference internal" href="#lic-keys-aws"><span class="std std-ref">Step 1: Supplying Configuration Values and Keys using AWS Secrets Manager</span></a></p></li>
+<li><p>Next Step: <a class="reference internal" href="#compile-docker"><span class="std std-ref">Step 3: Compose the docker-compose.yml File</span></a></p></li>
+</ul>
+<section id="step-2-configure-service-translation-service">
+<span id="api-service"></span><h3>Step 2: Configure Service: Translation Service<a class="headerlink" href="#step-2-configure-service-translation-service" title="Permalink to this heading"></a></h3>
+<p>You must set the following property in the <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file and disable the other services:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">panther</span><span class="o">.</span><span class="n">enabled</span><span class="o">=</span><span class="n">true</span>
+</pre></div>
+</div>
+<p><strong>Related Topics</strong></p>
+<ul class="simple">
+<li><p>Previous Step: <a class="reference internal" href="#lic-keys-aws"><span class="std std-ref">Step 1: Supplying Configuration Values and Keys using AWS Secrets Manager</span></a></p></li>
+<li><p>Next Step: <a class="reference internal" href="#compile-docker"><span class="std std-ref">Step 3: Compose the docker-compose.yml File</span></a></p></li>
+</ul>
+</section>
+<section id="step-2-configure-service-configure-as-a-vault">
+<span id="sdss-vault"></span><h3>Step 2: Configure Service: Configure as a Vault<a class="headerlink" href="#step-2-configure-service-configure-as-a-vault" title="Permalink to this heading"></a></h3>
+<p>Enable the vault service. Set the following property in the <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">sdv</span><span class="o">.</span><span class="n">enabled</span><span class="o">=</span><span class="n">true</span>
+</pre></div>
+</div>
+<section id="configure-secure-search-index">
+<h4>Configure Secure Search Index<a class="headerlink" href="#configure-secure-search-index" title="Permalink to this heading"></a></h4>
+<blockquote>
+<div><p>When you configure Titaniam Server as a vault, you must also configure a secure search index (Titaniam plugin integrated with Elasticsearch). You must configure the following:</p>
+</div></blockquote>
+<ol class="arabic">
+<li><p>Configure the following properties in the <cite>arcus:</cite> section of the <cite>docker_compose_yml</cite> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">aws_region</span><span class="o">=</span><span class="n">us</span><span class="o">-</span><span class="n">east</span><span class="o">-</span><span class="mi">2</span>
+<span class="o">-</span> <span class="n">titaniam</span><span class="o">.</span><span class="n">keyring</span><span class="o">.</span><span class="n">name</span><span class="o">=&lt;</span><span class="n">keyring</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+<span class="o">-</span> <span class="n">titaniam</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">type</span><span class="o">=</span><span class="n">aws</span>
+<span class="o">-</span> <span class="n">titaniam</span><span class="o">.</span><span class="n">aws</span><span class="o">.</span><span class="n">access</span><span class="o">.</span><span class="n">id</span><span class="o">=&lt;</span><span class="n">AWS_ACCESS_ID</span><span class="o">&gt;</span>
+<span class="o">-</span> <span class="n">titaniam</span><span class="o">.</span><span class="n">aws</span><span class="o">.</span><span class="n">secret</span><span class="o">.</span><span class="n">id</span><span class="o">=&lt;</span><span class="n">AWS_SECRET_ID</span><span class="o">&gt;</span>
+<span class="o">-</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="n">arcus01</span>
+<span class="o">-</span> <span class="n">http</span><span class="o">.</span><span class="n">port</span><span class="o">=</span><span class="mi">9200</span>
+</pre></div>
+</div>
+</li>
+<li><p>Configure the following property in the <code class="docutils literal notranslate"><span class="pre">spectra:</span></code> section of the <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>- spring.elasticsearch.rest.uris`: this property must match the IP and port of the elastic configured in the `arcus` section.
+</pre></div>
+</div>
+<p>For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">spring</span><span class="o">.</span><span class="n">elasticsearch</span><span class="o">.</span><span class="n">rest</span><span class="o">.</span><span class="n">uris</span><span class="o">=</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">arcus</span><span class="p">:</span><span class="mi">9200</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Related Topics</strong></p>
+<ul class="simple">
+<li><p>Previous Step: <a class="reference internal" href="#lic-keys-aws"><span class="std std-ref">Step 1: Supplying Configuration Values and Keys using AWS Secrets Manager</span></a></p></li>
+<li><p>Next Step: <a class="reference internal" href="#compile-docker"><span class="std std-ref">Step 3: Compose the docker-compose.yml File</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="step-2-configure-service-proxy-for-the-s3-object-store">
+<span id="proxy-s3"></span><h3>Step 2: Configure Service: Proxy for the S3 Object Store<a class="headerlink" href="#step-2-configure-service-proxy-for-the-s3-object-store" title="Permalink to this heading"></a></h3>
+<p>You can use the Titaniam Server as an S3 proxy to protect any requests to an S3 bucket in the specified region. The following diagrams illustrate the configuration with and without the Titaniam Server as a proxy. When the Titaniam Server is configured as an proxy, it passes through the endpoint requests except the PUTObject and GETObject endpoints. These endpoints are intercepted by the Titaniam Proxy for S3 and the data is encrypted and decrypted.</p>
+<img alt="_images/proxy.png" src="_images/proxy.png" />
+<p>Enable the proxy service. You must set the following property and disable other services in the <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>      - ripple.enabled=true
+- amazon.s3.bucket-name=[bucket_name]
+- amazon.s3.access-key=[access_key_id]
+- amazon.s3.secret-key=[secret_access_key]
+
+Where,
+
+   * ``amazon.s3.access-key`` and ``amazon.s3.secret-key`` are the access credentials for AWS S3. Ensure that you encrypt these using the zero-day encryption service. See :ref:`zero-day-encrypt`.
+   * ``amazon.s3.bucket-name``=&lt;bucket_name&gt; is the S3 bucket name.
+</pre></div>
+</div>
+<section id="configure-your-application-to-route-traffic-to-titaniam-s3-proxy">
+<h4>Configure your Application to Route Traffic to Titaniam S3 Proxy<a class="headerlink" href="#configure-your-application-to-route-traffic-to-titaniam-s3-proxy" title="Permalink to this heading"></a></h4>
+<p>In your application, you must override the existing endpoint URL. You must now point the endpoint URL to the Titaniam S3 Proxy.</p>
+<p><strong>If you are using AWS SDK V1</strong>, modify the endpoint URL as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AmazonS3</span> <span class="n">s3</span> <span class="o">=</span> <span class="n">AmazonS3ClientBuilder</span><span class="o">.</span><span class="n">standard</span><span class="p">()</span>
+   <span class="o">.</span><span class="n">withEndpointConfiguration</span><span class="p">(</span><span class="n">new</span> <span class="n">EndpointConfiguration</span><span class="p">(</span>
+        <span class="s2">&quot;{{secureStoreURL}}/v2/titaniam-s3-proxy&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;region&quot;</span><span class="p">))</span>
+   <span class="o">.</span><span class="n">withCredentials</span><span class="p">(</span><span class="n">CREDENTIALS_PROVIDER</span><span class="p">)</span>
+   <span class="o">.</span><span class="n">build</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>Where, you <code class="docutils literal notranslate"><span class="pre">{secureStoreURL}}/v2/titaniam-s3-proxy</span></code> points to the Titaniam S3 Proxy URL.</p>
+<p><strong>If you are using AWS SDK V2</strong>, modify the endpoint URL as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">URI</span> <span class="n">endpointOverride</span> <span class="o">=</span> <span class="n">new</span> <span class="n">URI</span><span class="p">(</span><span class="s2">&quot;{{secureStoreURL}}/v2/titaniam-s3-proxy&quot;</span><span class="p">);</span>
+<span class="n">S3Client</span><span class="o">.</span><span class="n">builder</span><span class="p">()</span>
+<span class="o">.</span><span class="n">credentialsProvider</span><span class="p">(</span><span class="n">CREDENTIALS_PROVIDER</span><span class="p">)</span>
+<span class="o">.</span><span class="n">endpointOverride</span><span class="p">(</span><span class="n">endpointOverride</span><span class="p">)</span>
+<span class="o">.</span><span class="n">region</span><span class="p">(</span><span class="n">region</span><span class="p">)</span>
+<span class="o">.</span><span class="n">build</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>Where, you <code class="docutils literal notranslate"><span class="pre">{secureStoreURL}}/v2/titaniam-s3-proxy</span></code> points to the Titaniam S3 Proxy URL.</p>
+<p><strong>If you are using boto3</strong>, modify the endpoint URL during client creation as described <a class="reference external" href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html">here</a>.</p>
+<p><strong>Related Topics</strong></p>
+<ul class="simple">
+<li><p>Previous Step: <a class="reference internal" href="#lic-keys-aws"><span class="std std-ref">Step 1: Supplying Configuration Values and Keys using AWS Secrets Manager</span></a></p></li>
+<li><p>Next Step: <a class="reference internal" href="#compile-docker"><span class="std std-ref">Step 3: Compose the docker-compose.yml File</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="step-2-configure-service-elastic-proxy">
+<span id="es-proxy"></span><h3>Step 2: Configure Service: Elastic Proxy<a class="headerlink" href="#step-2-configure-service-elastic-proxy" title="Permalink to this heading"></a></h3>
+<blockquote>
+<div><p>When you configure Titaniam Server as an elastic proxy, you must configure the following properties:</p>
+</div></blockquote>
+<ol class="arabic">
+<li><p>Create a folder on your virtual machine: <code class="docutils literal notranslate"><span class="pre">/var/lib/arcusdata</span></code>.</p></li>
+<li><p>Enable the elastic proxy service. Disable the other services. Set the following property in the <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">sdss</span><span class="o">.</span><span class="n">esproxy</span><span class="o">.</span><span class="n">enabled</span><span class="o">=</span><span class="n">true</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>Configure the location of the keys:</p>
+<blockquote>
+<div><ol class="loweralpha">
+<li><p>(Optional) If you are using the active key from the AWS Secrets Manager, Configure the following properties in the <code class="docutils literal notranslate"><span class="pre">arcus:</span></code> section of the <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">aws_region</span><span class="o">=</span><span class="n">us</span><span class="o">-</span><span class="n">east</span><span class="o">-</span><span class="mi">2</span>
+<span class="o">-</span> <span class="n">titaniam</span><span class="o">.</span><span class="n">keyring</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="n">vault</span><span class="o">-</span><span class="n">singlenode</span><span class="o">-</span><span class="n">byok</span>
+<span class="o">-</span> <span class="n">titaniam</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">type</span><span class="o">=</span><span class="n">aws</span>
+<span class="o">-</span> <span class="n">titaniam</span><span class="o">.</span><span class="n">aws</span><span class="o">.</span><span class="n">access</span><span class="o">.</span><span class="n">id</span><span class="o">=&lt;</span><span class="n">AWS_ACCESS_ID</span><span class="o">&gt;</span>
+<span class="o">-</span> <span class="n">titaniam</span><span class="o">.</span><span class="n">aws</span><span class="o">.</span><span class="n">secret</span><span class="o">.</span><span class="n">id</span><span class="o">=&lt;</span><span class="n">AWS_SECRET_ID</span><span class="o">&gt;</span>
+<span class="o">-</span> <span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="o">=</span><span class="n">arcus01</span>
+<span class="o">-</span> <span class="n">http</span><span class="o">.</span><span class="n">port</span><span class="o">=</span><span class="mi">9200</span>
+<span class="o">-</span> <span class="n">indices</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">bool</span><span class="o">.</span><span class="n">max_clause_count</span><span class="o">=</span><span class="mi">2000</span>
+</pre></div>
+</div>
+</li>
+<li><p>(Optional) If using byok (bring your own key) mode,</p>
+<ol class="lowerroman">
+<li><p>In your <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file, configure the following lines of code in the <cite>arcus</cite> section:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># byok configuration</span>
+<span class="o">-</span> <span class="n">titaniam</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">type</span><span class="o">=</span><span class="n">byok</span>
+<span class="o">-</span> <span class="n">titaniam</span><span class="o">.</span><span class="n">es</span><span class="o">.</span><span class="n">host</span><span class="o">=</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">arcus</span><span class="p">:</span><span class="mi">9200</span>
+<span class="o">-</span> <span class="n">titaniam</span><span class="o">.</span><span class="n">byok</span><span class="o">.</span><span class="n">refresh</span><span class="o">-</span><span class="n">secs</span><span class="o">=</span><span class="mi">30</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>In your <cite>docker-compose.yml</cite> file, configure the following lines of code in the <cite>spectra</cite> section:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># byok configuration</span>
+<span class="o">-</span> <span class="n">sdss</span><span class="o">.</span><span class="n">seed</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">type</span><span class="o">=</span><span class="n">byok</span>
+<span class="o">-</span> <span class="n">sdss</span><span class="o">.</span><span class="n">byok</span><span class="o">.</span><span class="n">host</span><span class="o">=</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">arcus</span><span class="p">:</span><span class="mi">9200</span>
+<span class="o">-</span> <span class="n">sdss</span><span class="o">.</span><span class="n">byok</span><span class="o">.</span><span class="n">refresh</span><span class="o">-</span><span class="n">secs</span><span class="o">=</span><span class="mi">30</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+</li>
+</ol>
+</div></blockquote>
+</li>
+<li><p>Configure the following property in the <code class="docutils literal notranslate"><span class="pre">spectra:</span></code> section of the <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">spring.elasticsearch.rest.uris=http://arcus:9200</span></code> indicates the URL of the Titaniam plugin.</p></li>
+<li><p>(Optional) <code class="docutils literal notranslate"><span class="pre">sdss.es.login=admin</span></code> indicates the admin login of the elastic node. This property is required only if you have installed Elasticsearch with authentication.</p></li>
+<li><p>(Optional) <code class="docutils literal notranslate"><span class="pre">sdss.es.password</span></code> provide the password after encrypting it with the master encryption key. This property is required only if you have installed Elasticsearch with authentication.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sdss.search.proxy.override.fields.&lt;INDEX_NAME&gt;.&lt;ABSOLUTE_FIELD_NAME&gt;=&lt;OVERRIDE_TYPE&gt;</span></code> specify any field properties in the elastic index that you want to override. For example, to return the values from the index as integers or boolean formats instead of strings. For example,</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sdss</span><span class="o">.</span><span class="n">search</span><span class="o">.</span><span class="n">proxy</span><span class="o">.</span><span class="n">override</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">example_index</span><span class="o">.</span><span class="n">days</span><span class="o">=</span><span class="n">integer</span>
+<span class="n">sdss</span><span class="o">.</span><span class="n">search</span><span class="o">.</span><span class="n">proxy</span><span class="o">.</span><span class="n">override</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">example_index</span><span class="o">.</span><span class="n">hours</span><span class="o">=</span><span class="n">integer</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Related Topics</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="hello_world_aws.html#byok-keys"><span class="std std-ref">Bring Your Own Keys</span></a></p></li>
+<li><p>Previous Step: <a class="reference internal" href="#lic-keys-aws"><span class="std std-ref">Step 1: Supplying Configuration Values and Keys using AWS Secrets Manager</span></a></p></li>
+<li><p>Next Step: <a class="reference internal" href="#compile-docker"><span class="std std-ref">Step 3: Compose the docker-compose.yml File</span></a></p></li>
+</ul>
+</section>
+<section id="step-2-configure-service-data-protection-service-for-object-store">
+<span id="dp-service"></span><h3>Step 2: Configure Service: Data Protection Service for Object Store<a class="headerlink" href="#step-2-configure-service-data-protection-service-for-object-store" title="Permalink to this heading"></a></h3>
+<p>The Titaniam Server can be used as a data protection service for an object store. The data protection service for object stores lets you encrypt and decrypt objects in your object stores. Currently, AWS S3 is supported. This service lets you do the following operations:</p>
+<ul class="simple">
+<li><p>Encrypt an object in-place in the object store. You must pass on the object reference to the data protection service.</p></li>
+<li><p>Generate an encoded URI to an object. You can use this URI to download the object in clear format.</p></li>
+</ul>
+<p>To enable the data-protection service, do the following:</p>
+<ol class="arabic">
+<li><p>(Configure at least one object store service) For example, If you are protecting objects in an AWS S3 object store, you must configure the Titaniam S3 proxy related properties (see <span class="xref std std-ref">_proxy_s3</span>).</p></li>
+<li><p>Set the following property file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sdss</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">protection</span><span class="o">.</span><span class="n">enabled</span><span class="o">=</span><span class="n">true</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Related Topics</strong></p>
+<ul class="simple">
+<li><p>Previous Step: <a class="reference internal" href="#lic-keys-aws"><span class="std std-ref">Step 1: Supplying Configuration Values and Keys using AWS Secrets Manager</span></a></p></li>
+<li><p>Next Step: <a class="reference internal" href="#compile-docker"><span class="std std-ref">Step 3: Compose the docker-compose.yml File</span></a></p></li>
+</ul>
+</section>
+</section>
+<section id="step-3-compose-the-docker-compose-yml-file">
+<span id="compile-docker"></span><h2>Step 3: Compose the docker-compose.yml File<a class="headerlink" href="#step-3-compose-the-docker-compose-yml-file" title="Permalink to this heading"></a></h2>
+<p>Specify the location of the encryption keys and <code class="docutils literal notranslate"><span class="pre">titaniam.properties</span></code> in the Secrets Manager in a <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file.</p>
+<p>For examples of the <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> files, see <a class="reference internal" href="hello_world_aws.html#example-compose"><span class="std std-ref">Appendix: Example Docker Compose YML Files and Property Files</span></a>.</p>
+<ol class="arabic">
+<li><p>Set the following properties:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">sdss</span><span class="o">.</span><span class="n">properties</span><span class="o">-</span><span class="n">source</span><span class="o">=</span><span class="n">aws</span><span class="o">.</span><span class="n">sm</span>
+<span class="o">-</span> <span class="n">sdss</span><span class="o">.</span><span class="n">secretsmanager</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">keyname</span><span class="o">=</span><span class="n">titaniam</span><span class="o">.</span><span class="n">properties</span>
+<span class="o">-</span> <span class="n">sdss</span><span class="o">.</span><span class="n">aws</span><span class="o">.</span><span class="n">sm</span><span class="o">.</span><span class="n">region</span><span class="o">=</span><span class="n">us</span><span class="o">-</span><span class="n">east</span><span class="o">-</span><span class="mi">2</span>
+<span class="o">-</span> <span class="n">sdss</span><span class="o">.</span><span class="n">aws</span><span class="o">.</span><span class="n">sm</span><span class="o">.</span><span class="n">keyring</span><span class="o">-</span><span class="n">name</span><span class="o">=&lt;</span><span class="n">keyring</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+<span class="o">-</span> <span class="n">sdss</span><span class="o">.</span><span class="n">seed</span><span class="o">.</span><span class="n">store</span><span class="o">.</span><span class="n">type</span><span class="o">=</span><span class="n">aws</span>
+<span class="o">-</span> <span class="n">sdss</span><span class="o">.</span><span class="n">aws</span><span class="o">.</span><span class="n">sm</span><span class="o">.</span><span class="n">access</span><span class="o">-</span><span class="n">key</span><span class="o">=&lt;</span><span class="n">AWS_ACCESS_ID</span><span class="o">&gt;</span>
+<span class="o">-</span> <span class="n">sdss</span><span class="o">.</span><span class="n">aws</span><span class="o">.</span><span class="n">sm</span><span class="o">.</span><span class="n">secret</span><span class="o">-</span><span class="n">key</span><span class="o">=&lt;</span><span class="n">AWS_SECRET_ID</span><span class="o">&gt;</span>
+<span class="o">-</span> <span class="n">titaniam</span><span class="o">.</span><span class="n">secrets</span><span class="o">.</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Where,</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sdss.properties-source</span></code> indicates that the configuration properties are stored in the AWS Secrets Manager.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sdss.secretsmanager.properties.keyname</span></code> specifies the key name of the configuration properties file. This must be set to <code class="docutils literal notranslate"><span class="pre">titaniam.properties</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sdss.aws.sm.region</span></code> indicates the region of the AWS machines.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sdss.aws.sm.keyring-name</span></code> indicates the &lt;keyring_name&gt; from the Secrets Manager. Secret name is of the format - <cite>titaniam_key_ring/&lt;keyring_name&gt;/&lt;key_name&gt;</cite>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sdss.seed.store.type</span></code> specifies that the keystore is in AWS.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sdss.aws.sm.access-key</span></code> specifies the encrypted access key required by Titaniam Server to access the Secrets Manager. Ensure that you specify the encrypted value. You can encrypt your client ID using the zero-day encryption (see <a class="reference internal" href="production.html#zero-day-encrypt"><span class="std std-ref">Zero-day Encryption Service</span></a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sdss.aws.sm.secret-key</span></code> specifies the encrypted secret key required by Titaniam Server to access the Secrets Manager. Ensure that you specify the encrypted value. You can encrypt your client ID using the zero-day encryption (see <a class="reference internal" href="production.html#zero-day-encrypt"><span class="std std-ref">Zero-day Encryption Service</span></a>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">titaniam.secrets.prefix</span></code> specifies the prefix path to secrets in AWS Secrets Manager. For example if you have specify <code class="docutils literal notranslate"><span class="pre">titaniam.secrets.prefix=prefix1</span></code>, you must store the titaniam.license in AWS Secrets as <code class="docutils literal notranslate"><span class="pre">&lt;prefix1&gt;titaniam.licence</span></code>. Encryptions keys as <code class="docutils literal notranslate"><span class="pre">&lt;prefix1&gt;titaniam_key_ring/&lt;keyring_name&gt;/&lt;INDEX_NAME&gt;</span></code>.</p></li>
+</ul>
+<p><strong>Related Topics</strong></p>
+<ul class="simple">
+<li><p>Previous Step: <a class="reference internal" href="#configure-server"><span class="std std-ref">Step 2: Configure Services</span></a></p></li>
+<li><p>Next Step: <a class="reference internal" href="#install-docker"><span class="std std-ref">Step 4: Deploy Titaniam Server using Docker</span></a></p></li>
+</ul>
+</section>
+<section id="step-4-deploy-titaniam-server-using-docker">
+<span id="install-docker"></span><h2>Step 4: Deploy Titaniam Server using Docker<a class="headerlink" href="#step-4-deploy-titaniam-server-using-docker" title="Permalink to this heading"></a></h2>
+<p>This section explains how to bring up the Titanaim Server service using docker.</p>
+<section id="install-titaniam-server-without-bringing-up-the-titaniam-services">
+<h3>Install Titaniam Server without Bringing up the Titaniam Services<a class="headerlink" href="#install-titaniam-server-without-bringing-up-the-titaniam-services" title="Permalink to this heading"></a></h3>
+<p>If you are interested in pulling in the Titaniam Server docker image but not bringing up Titaniam Server, do the following as a root user:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">titaniam</span><span class="o">/</span><span class="n">spectra</span><span class="p">:</span><span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>You must replace <em>version</em> with the actual version number. Contact Titaniam Support if needed.</p>
+</section>
+<section id="install-titaniam-server">
+<h3>Install Titaniam Server<a class="headerlink" href="#install-titaniam-server" title="Permalink to this heading"></a></h3>
+<p>As a root user, run the docker-compose image:</p>
+<ol class="arabic">
+<li><p>Login to the docker registry:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">login</span>
+</pre></div>
+</div>
+</li>
+<li><p>At the password prompt, enter the username and personal access token you received.</p></li>
+<li><p>(Only if you are running the services as Vault or Elasticsearch proxy), bring up the Titaniam service with the plugin <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file. Use the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span> <span class="o">-</span><span class="n">d</span>
+</pre></div>
+</div>
+</li>
+<li><p>Bring up the Titaniam Server service with the respective <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code>, run the following command with the Titaniam Server service:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span> <span class="o">-</span><span class="n">d</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+<section id="post-installation-steps">
+<h2>Post-Installation Steps<a class="headerlink" href="#post-installation-steps" title="Permalink to this heading"></a></h2>
+<p>This chapter describes the following:</p>
+<ul class="simple">
+<li><p>Accessing the Logs</p></li>
+<li><p>Verifying the Installation</p></li>
+</ul>
+<section id="logs">
+<h3>Logs<a class="headerlink" href="#logs" title="Permalink to this heading"></a></h3>
+<p>All logs are handled by the docker logs. See <a class="reference external" href="https://docs.docker.com/config/containers/logging/">docker log documentation</a>.</p>
+<p>Run the following command tocheck logs for your container:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">logs</span> <span class="o">-</span><span class="n">f</span> <span class="o">&lt;</span><span class="n">container_name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="verifying-the-installation-for-vault-and-translation-services">
+<h3>Verifying the Installation for Vault and Translation Services<a class="headerlink" href="#verifying-the-installation-for-vault-and-translation-services" title="Permalink to this heading"></a></h3>
+<p>Perform the following steps to verify that the installation is successful, send the following CURL request:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">--</span><span class="n">location</span> <span class="o">--</span><span class="n">request</span> <span class="n">GET</span> <span class="s1">&#39;http:/&lt;baseURL&gt;:8080/actuator/health&#39;</span>
+</pre></div>
+</div>
+<p>You must receive a response similar to the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+
+<span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;UP&quot;</span><span class="p">,</span>
+
+<span class="s2">&quot;components&quot;</span><span class="p">:</span> <span class="p">{</span>
+
+<span class="s2">&quot;db&quot;</span><span class="p">:</span> <span class="p">{</span>
+
+<span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;UP&quot;</span><span class="p">,</span>
+
+<span class="s2">&quot;details&quot;</span><span class="p">:</span> <span class="p">{</span>
+
+<span class="s2">&quot;database&quot;</span><span class="p">:</span> <span class="s2">&quot;PostgreSQL&quot;</span><span class="p">,</span>
+
+<span class="s2">&quot;validationQuery&quot;</span><span class="p">:</span> <span class="s2">&quot;isValid()&quot;</span>
+
+<span class="p">}</span>
+
+<span class="p">},</span>
+
+<span class="s2">&quot;diskSpace&quot;</span><span class="p">:</span> <span class="p">{</span>
+
+<span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;UP&quot;</span><span class="p">,</span>
+
+<span class="s2">&quot;details&quot;</span><span class="p">:</span> <span class="p">{</span>
+
+<span class="s2">&quot;total&quot;</span><span class="p">:</span> <span class="mi">53675536384</span><span class="p">,</span>
+
+<span class="s2">&quot;free&quot;</span><span class="p">:</span> <span class="mi">7795793920</span><span class="p">,</span>
+
+<span class="s2">&quot;threshold&quot;</span><span class="p">:</span> <span class="mi">10485760</span><span class="p">,</span>
+
+<span class="s2">&quot;exists&quot;</span><span class="p">:</span> <span class="n">true</span>
+
+<span class="p">}</span>
+
+<span class="p">},</span>
+
+<span class="s2">&quot;ping&quot;</span><span class="p">:</span> <span class="p">{</span>
+
+<span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;UP&quot;</span>
+
+<span class="p">}</span>
+
+<span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Titaniam, Inc.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

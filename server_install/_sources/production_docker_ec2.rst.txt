@@ -1,0 +1,57 @@
+*****************************************************
+Production Installation Using Docker on EC2 Instances
+*****************************************************
+
+This section describes how you can deploy Titaniam Server on EC2 instances using docker in the following production layout:
+
+.. image:: _static/prod_ec2.png
+
+Configuration
+=============
+
+This section explains instructions to deploy Titaniam Server in the following configurations:
+
+* 4 EC2 instances:
+  
+  * An EC2 instance for installing Titaniam Plugin and Kibana
+  * An EC2 instance for installing and hosting PostgreSQL
+  * Two EC2 instances for installing and hosting Titaniam Server configured as Vault.
+
+* The Titaniam Server and Kibana are accessible only through a network load balancer.
+* The Titaniam Server can access the PostgreSQL instance and Titaniam Plugin using their private IP addresses.
+
+
+Prerequisites
+=============
+
+* Read this :ref:`ps_matrix`.
+
+* Ensure that the each EC2 instance where you run Titaniam Server must have access to the Secrets Manager. Obtain an IAM Role with policy **SecretsManagerReadWrite**. This role allows the Titaniam Server to read and write to AWS Secrets Manager.
+
+* The AWS EC2 instances have access to internet initially to install docker, docker-compose, and Titaniam Server from the docker registry.
+
+  .. note::
+
+     After installing the components, ensure that you remove any public IP on the EC2 instances. You must access the EC2 instance only using the load balancer.
+
+.. include:: ../../common/production_installation_ec2.rst
+
+.. include:: ../../common/AWS_ec2.rst
+
+.. include:: ../../common/aws_license.rst
+
+.. include:: ../../common/keygeneration.rst
+
+.. include:: ../../common/aws_application_properties.rst
+
+.. include:: ../../common/AWS_local.rst
+
+.. include:: ../../common/install_plugin_kibana.rst
+
+.. include:: ../../common/install_postgres.rst
+
+.. include:: ../../common/install_vault.rst
+
+.. include:: ../../common/integrate_with_datastore_ec2.rst
+
+.. include:: ../../common/configure_loadbalancer.rst

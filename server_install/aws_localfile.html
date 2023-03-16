@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>POC Installation with Secrets in Local File System &mdash; Titaniam Server Installation Guide for AWS 1.00a documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html">
+            <img src="_static/Primary lockup red_white.svg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html">What’s New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#introduction">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#planning-your-installation">Planning your Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#platform-support-matrix">Platform Support Matrix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#poc-installation-with-secrets-in-local-file-system">POC Installation with Secrets in Local File System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#poc-installation-with-aws-secrets-manager">POC Installation with AWS Secrets Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#production-installation-using-kubernetes">Production Installation Using Kubernetes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#production-installation-using-docker-on-ec2-instances">Production Installation Using Docker on EC2 Instances</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#appendix-titaniam-specific">Appendix: Titaniam-Specific</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#appendix-example-docker-compose-yml-files-and-property-files">Appendix: Example Docker Compose YML Files and Property Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hello_world_aws.html#appendix-generic-concepts-and-tasks">Appendix: Generic Concepts and Tasks</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Titaniam Server Installation Guide for AWS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>POC Installation with Secrets in Local File System</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/aws_localfile.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="poc-installation-with-secrets-in-local-file-system">
+<h1>POC Installation with Secrets in Local File System<a class="headerlink" href="#poc-installation-with-secrets-in-local-file-system" title="Permalink to this heading"></a></h1>
+<p>You must install all components required to run Titaniam Server on a single machine or VM in a POC layout. However, only one instance of each component is installed, and therefore there is no built-in redundancy. The POC layout is suitable for development, functional evaluation, QA, and so on. However, this layout is not ideal for running production environments. And it is also not a realistic setup for performance testing or benchmarking. This POC layout includes:</p>
+<ul class="simple">
+<li><p>Supplying license, encryption keys, and application properties using a local file system.</p></li>
+</ul>
+<section id="titaniam-server-artifacts">
+<h2>Titaniam Server Artifacts<a class="headerlink" href="#titaniam-server-artifacts" title="Permalink to this heading"></a></h2>
+<p>You will need the following artifacts:</p>
+<ul class="simple">
+<li><p>Docker Compose template (Copy from <a class="reference internal" href="hello_world_aws.html#titaniam-file-server"><span class="std std-ref">docker-compose.yml</span></a>)</p></li>
+<li><p>Titaniam Properties File (Copy from <a class="reference internal" href="hello_world_aws.html#titaniam-all-props"><span class="std std-ref">Titaniam Properties</span></a>)</p></li>
+<li><p>Keyring.json (see <a class="reference internal" href="hello_world_aws.html#keygen2"><span class="std std-ref">Generate an Encrypted Data Encryption Key and Optionally a Master Key</span></a>)</p></li>
+</ul>
+<p>You will need to obtain the following from Titaniam Support:</p>
+<ul class="simple">
+<li><p>License file and SHA Checksum</p></li>
+<li><p>Titaniam docker images are available in a private repository in Docker Hub. You need an access token to download the images. Contact Titaniam support to get your access token.</p></li>
+</ul>
+</section>
+<section id="install-process">
+<h2>Install Process<a class="headerlink" href="#install-process" title="Permalink to this heading"></a></h2>
+<ol class="arabic">
+<li><p>Store the following files on the local file system:</p>
+<ol class="loweralpha simple">
+<li><p>License</p></li>
+<li><p>Titaniam Server application properties</p></li>
+<li><p>Encryption keys</p></li>
+</ol>
+</li>
+<li><p>Install Titaniam Plugin, Kibana, Postgres, and Titaniam Server.</p></li>
+<li><p>Configure Titaniam Server as one of the following services:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Translation Service</p></li>
+<li><p>Vault</p></li>
+<li><p>Proxy for the object store</p></li>
+<li><p>Elastic Proxy</p></li>
+<li><p>Data Protection Service</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Copy and modify the <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file.</p></li>
+<li><p>Bring up the Titaniam Server service using <code class="docutils literal notranslate"><span class="pre">docker-compose</span></code>.</p></li>
+</ol>
+<section id="storing-titaniam-license-on-local-file-system">
+<span id="license-local"></span><h3>Storing Titaniam License on Local File System<a class="headerlink" href="#storing-titaniam-license-on-local-file-system" title="Permalink to this heading"></a></h3>
+<p>Store the license with the value provided by Titaniam on your virtual machine, for example, <code class="docutils literal notranslate"><span class="pre">/home/centos/titaniam_config/license</span></code>.</p>
+<section id="example-titaniam-license">
+<h4>Example Titaniam License<a class="headerlink" href="#example-titaniam-license" title="Permalink to this heading"></a></h4>
+<p>The values provided here are just examples. Edit it to reflect the
+license file and SHA that you received from Titaniam Support. Occasionally the license file may include an expiry date. You can leave that in place. It does not affect the behavior.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+
+<span class="s2">&quot;digest&quot;</span><span class="p">:</span> <span class="s2">&quot;P9r7miQDNOf/0HWg8WQjBotJ79PP6WTw+0BQ9VT/fXQ=&quot;</span><span class="p">,</span>
+
+<span class="s2">&quot;license&quot;</span><span class="p">:</span><span class="s2">&quot;vwOraInV23PJ2ePSqHmsnULtSfi98AYO2NHJDCv3f39INv4c9xIGiry3fyW19iZ3nOpIb3QI2akOSg0I6/CZvweoozFtZnP3xqWWXL6t4hhCBNuCdpWGh3XCAVN2xXb5u8S55GjTeWs3IZz5JnHOTSPUCBunicy2TSPNmo/4ScNM7fQagyrqxsiQphq9hnU8vmngQ4E3udqIh086S++2ERk+nki/TDpMWpOxCVcf3ZdnVo+Ra+Tw01MIOxeM3PuRzFMAVJNyGb7BumDfmN6wOlnzpXoVKkDSfQwD1pwkpJcMpKcX8uJMmPo0fJ022w3j0bjMsHy/buMeUybRSdjYUzrIrNosrjDJtoCgel8ygOrscUf9HnJFIziRSd2wCzNpyZyJFUKWhV7LHATPigmeXoHHqWlND0f5YECdvlqLdZXnZllYxuv/xOAIPKzjSyN+GeESmoQavFTNL14XGSKw6Xz825iBdyRJkGW/JsYClBemBRQelgkoxerBTyq80CcSmaie5UdblYuMwTXr13sySWJbX7VdKMKoReRGun+vphHBQnTDPIagb1AiYnsOjSMYdK03SZvGjuujzwRwgn23m9pBJL3iaGTP+1cTrqN/b6FijTsAzxU55Ny3YbQ54f4zM7g0lk0wZepPtPpTG3hx6D83StcNaXRxRx5u3YB5ET8=&quot;</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="storing-application-properties-and-service-definitions">
+<span id="local-properties-all"></span><h3>Storing Application Properties and Service Definitions<a class="headerlink" href="#storing-application-properties-and-service-definitions" title="Permalink to this heading"></a></h3>
+<p>Create a <code class="docutils literal notranslate"><span class="pre">titaniam.properties</span></code> file with the <a class="reference internal" href="hello_world_aws.html#titaniam-all-props"><span class="std std-ref">properties</span></a> and store it at a location on your EC2 instance.</p>
+</section>
+<section id="storing-encryption-keys-in-local-file-system">
+<h3>Storing Encryption Keys in Local File System<a class="headerlink" href="#storing-encryption-keys-in-local-file-system" title="Permalink to this heading"></a></h3>
+<p>Storing Encrypted Data Keys: Includes a master key (also called as Key Encryption Key, KEK) and one or more data encryption keys. The data encryption keys are encoded using the master key before adding them to the <code class="docutils literal notranslate"><span class="pre">keyring.json</span></code> file. You can select one of the data encryption keys as an active key.</p>
+<p>Storing encryption keys involves the following steps:</p>
+<ol class="arabic simple">
+<li><p>Generate a master key and an encrypted data encryption key. See <a class="reference internal" href="hello_world_aws.html#keygen2"><span class="std std-ref">Generate an Encrypted Data Encryption Key and Optionally a Master Key</span></a>.</p></li>
+<li><p>Create a <a class="reference internal" href="hello_world_aws.html#key-ring-json"><span class="std std-ref">Keyring.JSON</span></a> file and update the <code class="docutils literal notranslate"><span class="pre">keyring.json</span></code> file with the output of the previous step.</p></li>
+<li><p>Store the <code class="docutils literal notranslate"><span class="pre">keyring.JSON</span></code> file on your EC2 instance.</p></li>
+<li><p>Update the <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code> file to mount the <code class="docutils literal notranslate"><span class="pre">keyring.JSON</span></code> file as a volume.</p></li>
+</ol>
+</section>
+</section>
+<section id="installing-titaniam-services">
+<span id="install-vault-aws-localfile"></span><h2>Installing Titaniam Services<a class="headerlink" href="#installing-titaniam-services" title="Permalink to this heading"></a></h2>
+<p>This section explains the overall process to install all Titaniam Server services, Titaniam plugin and Postgres.</p>
+<section id="installation-procedure">
+<h3>Installation Procedure<a class="headerlink" href="#installation-procedure" title="Permalink to this heading"></a></h3>
+<p>Following is the process to install all Titaniam services and the datastore Postgres.</p>
+<ol class="arabic">
+<li><p>Install docker and docker-compose. See <a class="reference internal" href="hello_world_aws.html#install-docker-os"><span class="std std-ref">Install Docker and Docker Compose</span></a>. Ignore this step if you have already installed docker and docker compose.</p></li>
+<li><p>Create the following folders on your virtual machine. These folders are required by Postgres and Titaniam Plugin and Kibana to store data.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">mkdir</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="mi">13</span><span class="o">/</span><span class="n">main</span>
+<span class="n">sudo</span> <span class="n">mkdir</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">arcusdata</span>
+<span class="n">sudo</span> <span class="n">mkdir</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">kibanadata</span>
+</pre></div>
+</div>
+</li>
+<li><p>Ensure that that user that installs Titaniam Server has ownership and write access to the folders from the previous step. Do the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">chown</span> <span class="o">-</span><span class="n">R</span> <span class="mi">1000</span><span class="p">:</span><span class="mi">1000</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">postgresql</span><span class="o">/</span><span class="mi">13</span><span class="o">/</span><span class="n">main</span>
+<span class="n">sudo</span> <span class="n">chown</span> <span class="o">-</span><span class="n">R</span> <span class="mi">1000</span><span class="p">:</span><span class="mi">1000</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">arcusdata</span>
+<span class="n">sudo</span> <span class="n">chown</span> <span class="o">-</span><span class="n">R</span> <span class="mi">1000</span><span class="p">:</span><span class="mi">1000</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">kibanadata</span>
+</pre></div>
+</div>
+</li>
+<li><p>Copy this <a class="reference internal" href="hello_world_aws.html#titaniam-all-props"><span class="std std-ref">Titaniam Properties</span></a> file, and modify the following properties if you want to use the S3 proxy service and the data protection service. This example Titaniam.properties file enables all other Titaniam services.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">amazon</span><span class="o">.</span><span class="n">s3</span><span class="o">.</span><span class="n">region</span><span class="o">=&lt;</span><span class="n">bucket</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+<span class="n">amazon</span><span class="o">.</span><span class="n">s3</span><span class="o">.</span><span class="n">access</span><span class="o">-</span><span class="n">key</span><span class="o">=&lt;</span><span class="n">encrypted_access_key_id</span><span class="o">&gt;</span>
+<span class="n">amazon</span><span class="o">.</span><span class="n">s3</span><span class="o">.</span><span class="n">secret</span><span class="o">-</span><span class="n">key</span><span class="o">=&lt;</span><span class="n">encrypted_secret_access_key</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Where,</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">amazon.s3.access-key</span></code> and <code class="docutils literal notranslate"><span class="pre">amazon.s3.secret-key</span></code> are the access credentials for AWS S3. Ensure that you encrypt these using the zero-day encryption service. See <a class="reference internal" href="production.html#zero-day-encrypt"><span class="std std-ref">Zero-day Encryption Service</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">amazon.s3.bucket-name</span></code> is the default S3 bucket name.</p></li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+</li>
+<li><p>Copy this <a class="reference internal" href="hello_world_aws.html#titaniam-file-server"><span class="std std-ref">docker-compose.yml</span></a> file, and modify the location of license and data encryption key.</p>
+<p>In the <code class="docutils literal notranslate"><span class="pre">arcus</span></code> section</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Volumes</span><span class="p">:</span>
+
+      <span class="o">-</span> <span class="o">&lt;</span><span class="n">location</span> <span class="n">of</span> <span class="n">titaniam</span> <span class="n">licence</span><span class="o">&gt;</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">titaniam</span><span class="o">/</span><span class="n">license</span>
+      <span class="o">-</span> <span class="o">&lt;</span><span class="n">location</span> <span class="n">of</span> <span class="n">keyring</span><span class="o">.</span><span class="n">json</span><span class="o">&gt;</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">titaniam</span><span class="o">/</span><span class="n">keyring</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>In the <code class="docutils literal notranslate"><span class="pre">spectra</span></code> section, specify the Titaniam Server image version and location of license, data encryption key, and properties file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">image</span><span class="p">:</span> <span class="n">titaniam</span><span class="o">/</span><span class="n">spectra</span><span class="p">:</span><span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span>
+
+<span class="n">Volumes</span><span class="p">:</span>
+
+     <span class="o">-</span> <span class="o">&lt;</span><span class="n">location</span> <span class="n">of</span> <span class="n">titaniam</span> <span class="n">licence</span><span class="o">&gt;</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">titaniam</span><span class="o">/</span><span class="n">license</span>
+     <span class="o">-</span> <span class="o">&lt;</span><span class="n">location</span> <span class="n">of</span> <span class="n">titaniam</span><span class="o">.</span><span class="n">properties</span> <span class="n">file</span><span class="o">&gt;</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">granger</span><span class="o">/</span><span class="n">application</span><span class="o">.</span><span class="n">properties</span>
+     <span class="o">-</span> <span class="o">&lt;</span><span class="n">location</span> <span class="n">of</span> <span class="n">keyring</span><span class="o">.</span><span class="n">json</span><span class="o">&gt;</span><span class="p">:</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">titaniam</span><span class="o">/</span><span class="n">keyring</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+</li>
+<li><p>Login to the docker registry:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">login</span>
+</pre></div>
+</div>
+</li>
+<li><p>At the password prompt, enter the username and personal access token you received.</p></li>
+<li><p>Bring up the Titaniam services with the respective <code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code>, run the following command with the Titaniam Server service:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">-</span><span class="n">compose</span> <span class="n">up</span> <span class="o">-</span><span class="n">d</span>
+</pre></div>
+</div>
+</li>
+<li><p>To troubleshoot the bring up, open a separate terminal, and run the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tail</span> <span class="o">-</span><span class="n">f</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">granger</span><span class="o">/</span><span class="n">server</span><span class="o">.</span><span class="n">log</span>
+</pre></div>
+</div>
+</li>
+<li><p>Create a security group the virtual machine hosting Titaniam Server and create inbound rules to allow traffic on the ports that you have assigned for Titaniam Server (8080). For more information, see <a class="reference external" href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html#SecurityGroupRules">this document</a>.</p></li>
+<li><p>Send the curl command from the terminal. This command retrieves the product version:</p>
+<p>Request</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">curl</span> <span class="o">--</span><span class="n">location</span> <span class="o">--</span><span class="n">request</span> <span class="n">GET</span> <span class="s1">&#39;http://3.6.94.214:8080/v1/mgmt/version&#39;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Response</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">2.3.6_103</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+<section id="advanced-configurations">
+<h4>Advanced Configurations<a class="headerlink" href="#advanced-configurations" title="Permalink to this heading"></a></h4>
+<p>If needed, you can customize the following properties:</p>
+<ul class="simple">
+<li><p>Use a different datastore such as MariaDB or MYSQL or if you want to change the default username and password, see <a class="reference internal" href="single_node.html#integrate-data-store"><span class="std std-ref">Integrating with the Data Store</span></a>.</p></li>
+<li><p>Disable or enable independent Titaniam Services, see <a class="reference internal" href="single_node.html#configure-server"><span class="std std-ref">Step 2: Configure Services</span></a></p></li>
+<li><p>Configure additional properties related to Elasticsearch index, logging information, see <a class="reference internal" href="hello_world_aws.html#configure-misc"><span class="std std-ref">Configure Additional Properties in titaniam.properties</span></a>.</p></li>
+</ul>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Titaniam, Inc.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

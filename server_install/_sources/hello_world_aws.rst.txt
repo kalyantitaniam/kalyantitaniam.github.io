@@ -1,0 +1,21 @@
+.. include:: whats_new.rst
+
+.. include:: ../../common/server_overview.rst
+  
+.. include:: ../../common/planning_guide.rst
+
+.. include:: ../../common/install_matrix.rst
+
+.. include:: aws_localfile.rst
+
+.. include:: single_node.rst
+
+.. include:: production.rst
+
+.. include:: production_docker_ec2.rst
+
+.. include:: ../../common/appendix_prod.rst
+
+.. include:: ../../common/example_docker.rst
+
+.. include:: ../../common/appendix_generic.rst 

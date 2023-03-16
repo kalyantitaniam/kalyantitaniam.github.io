@@ -1,0 +1,56 @@
+**************************************************
+POC Installation with Secrets in Local File System
+**************************************************
+
+You must install all components required to run Titaniam Server on a single machine or VM in a POC layout. However, only one instance of each component is installed, and therefore there is no built-in redundancy. The POC layout is suitable for development, functional evaluation, QA, and so on. However, this layout is not ideal for running production environments. And it is also not a realistic setup for performance testing or benchmarking. This POC layout includes:
+
+* Supplying license, encryption keys, and application properties using a local file system.
+
+Titaniam Server Artifacts
+=========================
+
+You will need the following artifacts:
+   
+* Docker Compose template (Copy from :ref:`docker-compose.yml <titaniam_file_server>`)
+
+* Titaniam Properties File (Copy from :ref:`Titaniam Properties <titaniam_all_props>`)
+
+* Keyring.json (see :ref:`keygen2`)
+
+You will need to obtain the following from Titaniam Support:
+
+* License file and SHA Checksum
+
+* Titaniam docker images are available in a private repository in Docker Hub. You need an access token to download the images. Contact Titaniam support to get your access token.
+
+Install Process
+===============
+
+#. Store the following files on the local file system:
+
+   a. License
+   #. Titaniam Server application properties
+   #. Encryption keys 
+
+#. Install Titaniam Plugin, Kibana, Postgres, and Titaniam Server.
+
+#. Configure Titaniam Server as one of the following services:
+
+      * Translation Service
+      * Vault
+      * Proxy for the object store 
+      * Elastic Proxy
+      * Data Protection Service
+
+#. Copy and modify the ``docker-compose.yml`` file. 
+
+#. Bring up the Titaniam Server service using ``docker-compose``. 
+
+
+.. include:: ../../common/local_file_license.rst
+
+.. include:: ../../common/application_properties_sn_aws_all.rst
+
+.. include:: ../../common/keyencryption_aws_local.rst
+
+.. include:: ../../common/install_all_local.rst

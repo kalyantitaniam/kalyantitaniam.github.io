@@ -1,0 +1,75 @@
+*****************************************
+POC Installation with AWS Secrets Manager
+*****************************************
+
+This section describes how you can install all Titaniam Server components on a virtual machine. 
+
+Titaniam Server Artifacts
+=========================
+
+Obtain the following installation artifacts from Titaniam support:
+
+* Images:  
+
+	- Titaniam-Server
+	
+	.. only:: spectra
+
+	- Search Engine with the Titaniam Plugin pre-installed
+	
+
+* Docker Compose template
+
+* License file and SHA Checksum
+
+* Titaniam docker images are available in a private repository in Docker Hub. You need an access token to download the images. Contact Titaniam support to get your access token.
+
+Install Process
+===============
+
+#. Store the following as secrets:
+
+   a. License
+   #. Titaniam Server application properties
+   #. Encryption keys 
+
+#. Configure Titaniam Server as one of the following services:
+
+      * Translation Service
+      * Vault
+      * Proxy for the object store 
+      * Elastic Proxy
+
+#. Generate the ``docker-compose.yml`` file. 
+
+#. Bring up the Titaniam Server service using ``docker-compose``. 
+
+
+
+.. include:: ../../common/AWS.rst
+
+.. include:: ../../common/aws_license.rst
+
+.. include:: ../../common/keygeneration.rst
+
+.. include:: ../../common/aws_application_properties.rst
+
+.. include:: ../../common/integrate_with_datastore_server.rst
+
+.. include:: configure_services.rst
+
+.. include:: configure_translation.rst
+
+.. include:: configure_vault.rst
+
+.. include:: configure_proxy.rst
+
+.. include:: configure_elastic_proxy.rst
+
+.. include:: configure_data_protection_service.rst
+
+.. include:: ../../common/compose_docker.rst
+
+.. include:: ../../common/docker_installation.rst
+
+.. include:: ../../common/common.rst

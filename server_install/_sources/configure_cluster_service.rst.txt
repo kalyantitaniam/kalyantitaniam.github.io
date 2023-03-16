@@ -1,0 +1,20 @@
+.. _configure_cluster_service:
+
+Step 5: Make Service Available Outside the Cluster
+==================================================
+
+You must ensure that the Titaniam Server service is accessible outside the kubernetes cluster. To do this, you must create a service for Titaniam Server in the kubernetes cluster. To configure the service, use the ``spectra-service.yaml`` file.
+
+#. Specify the port in the ``port`` field.
+#. Specify the service name. This service name must match the one you mentioned in the ``spectra-configmap.yaml`` file.
+
+Following is a sample ``spectra-service.yaml`` file.
+
+..  literalinclude:: ../../common/_static/spectra-service.yml
+    :language: yaml
+
+**Related Topics**
+
+* Previous Step: :ref:`config_configmap`
+* Next Step: :ref:`config_deployment`
+

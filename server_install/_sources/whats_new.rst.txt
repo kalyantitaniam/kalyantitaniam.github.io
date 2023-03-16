@@ -1,0 +1,197 @@
+****************
+What's New
+****************
+
+This section describes the changes in the product for each release version.
+
+What's New in Build 2.3.7
+=========================
+
+* **Vault Tokens**: Added the following fields in the ``/v1/mgmt/key_rotation/latest/status`` API response:
+
+  - ``elaped_time_secs`` specifies in seconds since the master task (such as scheduling key rotation, or swapping of aliases ) was initiated.
+  - ``records_per_sec`` specifies the number of records that are processed per second. 
+  - ``note`` specifies the reason the ``total`` or ``completed`` fields read 0.
+
+  These two fields let you estimate the progress in terms of time and number of records processed for each of the key rotation tasks.
+
+* **Vault Tokens**: Updated the ``success`` and ``created`` fields to ``processed`` in the ``/v1/mgmt/key_rotation/latest/status`` API response.
+* **Vault Collections**: The following release_name related endpoints are introduced.
+
+.. table:: Refactored Endpoints
+
+   +---------------------------------------------------------------------+------------------------------------------------------+
+   | **New Endpoint**                                                    | **Replaces**                                         |
+   +=====================================================================+======================================================+
+   | ``/v2/release_schema/collections/{collection_name}/{release_name}`` | ``/v2/collections/{collection_name}/{release_name}`` |
+   +---------------------------------------------------------------------+------------------------------------------------------+
+
+
+What's New in Build 2.3.6
+=========================
+
+* **Data Protection Service**: Enabled the Data Protection service for object stores. This data protection service lets you encrypt objects in place in the object store and also generates an encoded URI to the objects. You can use this URI to download the objects in clear text. In this release, the AWS S3 object store is supported.
+
+	* Added the ``sdss.data.protection.enabled`` property to enable data protection on object stores. For more information, see :ref:`dp-service`.
+	* The following endpoints are enabled with the data protection service:
+
+	  - `Encrypt an Object in-place in S3 <https://docs.titaniamlabs.com/server/api/index.html#request-data-protection-for-object-stores-encrypt-an-object-in-place>`__
+	  - `Generate an URI to Download an Object in S3 <https://docs.titaniamlabs.com/server/api/index.html#request-data-protection-for-object-stores-generate-an-uri-to-download-an-object>`__
+
+* **Translation Service**: The following Translation Service APIs are deprecated:
+
+  ::
+
+		/keyword/tangle
+		/keyword/untangle
+		/date/tangle
+		/date/untangle
+		/text/tangle
+		/text/untangle
+		/keyword2/tangle
+		/keyword2/untangle
+		/fpe/encrypt
+		/fpenumber/encrypt
+		/fpe/decrypt
+		/fpenumber/decrypt
+		/integer/tangle
+		/integer/untangle
+		/ip/tangle
+		/ip/untangle
+
+
+What's New in Build 2.3.5
+=========================
+
+* Added the following body parameters to the `Continue Elasticsearch Tasks <https://docs.titaniamlabs.com/server/api/index.html#request-key-rotation-endpoints-rerun-elastic>`__, and `Rerun <https://docs.titaniamlabs.com/server/api/index.html#request-key-rotation-endpoints-rerun-key-activation-on-failure>`__ endpoints:
+
+  - ``number_of_shards``
+  - ``number_of_replicas``
+
+ For more information, see :ref:`static-index`.
+
+
+What's New in Build 2.3.4
+=========================
+
+* Added the following body parameters to the `Schedule key rotation <https://docs.titaniamlabs.com/server/api/index.html#request-key-rotation-endpoints-schedule-key-rotation>`__, `Continue Elasticsearch Tasks <https://docs.titaniamlabs.com/server/api/index.html#request-key-rotation-endpoints-rerun-elastic>`__, and `Rerun <https://docs.titaniamlabs.com/server/api/index.html#request-key-rotation-endpoints-rerun-key-activation-on-failure>`__ endpoints:
+
+  - ``reindex_slices``
+  - ``reindex_batch_size``
+  - ``reindex_scroll_timeout_mins``
+
+  For more information, see :ref:`reindex-settings`.
+
+* Added the following deployment-time Titaniam properties to support Elasticsearch reindex configuration settings:
+
+	- ``"sdss.es.reindex.slices": “<value>”,``
+	- ``"sdss.es.reindex.batch_size": <value>,``
+	- ``"sdss.es.reindex.scroll_timeout_mins": <value>,``
+
+	For more information, see :ref:`reindex-settings`.
+
+* The default value of the verbose query parameter is updated to ``false`` for the following Translation Service endpoints:
+
+	- ``v2/ff1_alphanumeric/encrypt``
+	- ``v2/ff1_alphanumeric/decrypt``
+	- ``v2/ff1_alphanumeric_no_tweak/encrypt``
+	- ``v2/ff1_alphanumeric_no_tweak/decrypt``
+	- ``v2/ff1_numeric/encrypt``
+	- ``v2/ff1_numeric/decrypt``
+	- ``v2/ff1_numeric_no_tweak/encrypt``
+	- ``v2/ff1_numeric_no_tweak/decrypt``
+	- ``v2/ff1_printable_ascii/encrypt``
+	- ``v2/ff1_printable_ascii/decrypt``
+
+What's New in Build 2.3.1
+=========================
+
+* If the Titaniam Vault or database service is restarted during a database key rotation operation, you can now resume the database operations after the services are available. For more information, see `Continue Database Tasks <https://docs.titaniamlabs.com/server/api/index.html#request-key-rotation-endpoints-rerun-db>`__.
+
+* If any Elasticsearch errors occur during an Elasticsearch key rotation operation, you can now resume the Elasticsearch operations. For more information, see `Continue Elasticsearch Tasks <https://docs.titaniamlabs.com/server/api/index.html#request-key-rotation-endpoints-rerun-elastic>`__.
+
+
+What's New in Build 2.3.0
+=========================
+
+* Added the following body parameters to the Schedule Key Rotation (Vault Token) endpoint:
+
+  - ``number_of_shards``
+  - ``number_of_replicas``
+
+* Added the following deployment-time Titaniam properties to support Elasticsearch index settings for shards and replicas:
+
+  - ``"sdss.es.number_of_shards": "2",``
+  - ``"sdss.es.number_of_replicas": "2",``
+  - ``"sdss.store.elapsed.millis": "true",``
+
+	For more information, see :ref:`static-index`.
+
+* Improved the performance of the bulk store (``{{secureStoreURL}}/v2/secure/store/bulk``) and bulk retrieve (``{{secureStoreURL}}/v2/secure/retrieve/bulk``) endpoints. These endpoints now internally make a single request instead of multiple requests to the Elasticsearch.
+* Added the ``sdss.store.elapsed.millis`` property. When you use this property during Titaniam Server deployment, the API response for bulk store endpoint returns the following headers:
+
+	- ``X-tn-es-lookup-millis``
+	- ``X-tn-db-millis``
+	- ``X-tn-es-millis``
+	- ``X-tn-total-time-millis``
+
+	For more information, see :ref:`millisecs`.
+
+* Added the following endpoint to support UDT translation in Titaniam Translation Service:
+
+  - `Modify UDT Definition <https://docs.titaniamlabs.com/server/api/index.html#request-user-defined-types-modify-udt-definition>`__
+
+What's New in Build 2.2.1
+=========================
+
+.. only:: aws
+
+		* Added support for a prefix in AWS Secrets: You can now specify this property in the ``docker-compose.yml`` file. When you the ``titaniam.secrets.prefix`` property, the secret name must be of the format ``<prefix>titaniam_key_ring/<keyring_name>/<INDEX_NAME>`` for data encryption key, ``<prefix>titaniam.license`` for the Titaniam license, and ``<prefix>titaniam_key_ring/<department>/titaniam_key_encryption_key`` for the master key. 
+		* Added support for master keys in AWS. You can now add your master key as a secret in AWS. The master key must be of the format: ``<prefix>titaniam_key_ring/<department>/titaniam_key_encryption_key`` or ``titaniam_key_ring/<department>/titaniam_key_encryption_key``. When you use this feature, ensure that you also use an encrypted data encryption key in AWS. 
+		
+* Updates to Translation Service:
+
+	* Added the following endpoints to support UDT translation in Titaniam Translation Service.
+
+	  - `Create UDT Definition <https://docs.titaniamlabs.com/server/api/index.html#request-translate-user-defined-types-create-udt-definition>`__
+	  - `GET UDT Definition <https://docs.titaniamlabs.com/server/api/index.html#request-translate-user-defined-types-get-udt-definition>`__
+	  - `Delete UDT Definition <https://docs.titaniamlabs.com/server/api/index.html#request-translate-user-defined-types-delete-udt-definition>`__
+	  - `Translate Tokens <https://docs.titaniamlabs.com/server/api/index.html#request-translate-user-defined-types-translate-data>`__
+	  - `Translate Tokens using Pre-defined UDT Transformations <https://docs.titaniamlabs.com/server/api/index.html#request-translate-user-defined-types-translate-data-using-pre-defined-transformations>`__
+	* Added support for length validation in UDT endpoints. You must now pass ``max_length`` and ``min_length`` fields in the UDT definition.
+	* Added support for the format type ``ff1_printable_ascii_no_tweak`` in the UDT definition.
+	* When using the ``printable_ascii`` character set in an UDT defintion, the formatting_characters are stripped before encryption.
+	* The ``start`` and ``end`` fields in an UDT definition are now used after stripping the formatting characters.
+
+* Added integrity checks on the ``encryption_key`` tables in the datastores. This support is to prevent the following scenarios:
+
+	* Changing the encryption key material for an active encryption key
+	* Removing an encryption key from the key store
+
+* Added an optional property ``sdss.encryption-keys.check-integrity``. You must set this property to ``true`` to enable the integrity checks on ``encryption_key`` tables during Titaniam Server startup.
+
+Upgrading to Build 2.2.1
+------------------------
+
+In build 2.2.1, integrity checks are added on ``encryption_key`` tables in the datastore. So, you must alter your tables in the datastore before upgrading your Titaniam Server installation to version 2.2.1.
+
+Run the following commands on your datastore:
+
+MariabDB::
+
+	alter table encryption_key add column IF NOT EXISTS digest varchar(255)
+	alter table encryption_key add column disabled boolean default false
+
+postgres::
+
+	alter table encryption_key add column IF NOT EXISTS digest varchar (255)
+	alter table encryption_key add column disabled boolean default false
+
+Related Topics
+--------------
+
+* :ref:`license`
+* :ref:`key-generation`
+* `Create UDT Definition <https://docs.titaniamlabs.com/server/api/index.html#request-translate-user-defined-types-create-udt-definition>`__
+* :ref:`configure_misc`
+
